@@ -53,7 +53,7 @@ public class UserDAOImpl implements UserDAO {
 	public String createAccount(String emailId,String firstName,String lastName,String password,String confirmPassword) {
 		// TODO Auto-generated method stub
 		try {
-			if (!emailExists(emailId)) {
+			if (emailExists(emailId)) {
 				return "Email ID already exists";
 			}
 			else if (firstName == "") {
