@@ -14,7 +14,7 @@
  PASSWORD:<input type="password" name="password"><br>
  CONFIRM PASSWORD:<input type="password" name="confirmPassword"><br>
 
-<input type="submit" name="Create account"> 
+<input type="submit" value="Create account"> 
 </form>
 </body>
 </html>

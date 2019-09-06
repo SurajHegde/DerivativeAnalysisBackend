@@ -11,6 +11,7 @@
  E-MAIL:<input type="text" name="emailId"><br>
  PASSWORD:<input type="password" name="password"><br>
  <input type="submit" value="login">
+ <div style="color : #FF0000">${loginErrorMessage}</div>
  </form>
 </body>
 </html>

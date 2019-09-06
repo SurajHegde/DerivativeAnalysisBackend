@@ -9,15 +9,16 @@ import com.connection.MyConnection;
 import com.pojo.Holding;
 
 public class UserDAOImpl implements UserDAO {
-	
+
 	@Override
 	public boolean emailExists(String emailId) {
+
 		// TODO Auto-generated method stub
 		String emailExists = "select * from users where emailId = ?";
 		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(emailExists);){
 			ps.setString(1, emailId);
 			ResultSet set = ps.executeQuery();
-			
+
 			if (set.next()) {
 				return true;
 			}
@@ -36,7 +37,7 @@ public class UserDAOImpl implements UserDAO {
 			ps.setString(2, firstName);
 			ps.setString(3, lastName);
 			ps.setString(4, password);
-			
+
 			int rows = ps.executeUpdate();
 			if (rows > 0) {
 				return true;
@@ -57,7 +58,7 @@ public class UserDAOImpl implements UserDAO {
 			if (emailExists(emailId)) {
 				error += "Email ID already exists\n";
 			}
-			
+
 			if(emailId == "") {
 				error += "Email ID cannot be empty\n";
 			}
@@ -92,24 +93,26 @@ public class UserDAOImpl implements UserDAO {
 	public String login(String emailId,String password) {
 		// TODO Auto-generated method stub
 		if (!emailExists(emailId)) {
-			return "No account has been created with the associated email ID";
+			return "No account with such an email exists";
 		}
-		String emailPasswordCombo = "select * from users where emailId = ?";
-		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(emailPasswordCombo);){
-			ps.setString(1, emailId);
-			ResultSet set = ps.executeQuery();
-			
-			while (set.next()) {
-				String databasePassword=set.getString("PASSWORD");
-				if (!databasePassword.equals(password)) {
-					return "Invalid credentials";
+		else {
+			String emailPasswordCombo = "select firstname,lastname,password from users where emailId = ?";
+			try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(emailPasswordCombo);){
+				ps.setString(1, emailId);
+				ResultSet set = ps.executeQuery();
+
+				while (set.next()) {
+					String databasePassword=set.getString("password");
+					if (!databasePassword.equals(password)) {
+						return "Invalid credentials";
+					}
+					else {
+						return set.getString("firstname") + " " + set.getString("lastname"); 
+					}
 				}
-				else {
-					return "Hello "+set.getString("FIRSTNAME")+" "+set.getString("LASTNAME");
-				}
+			}catch(SQLException e) {
+				e.printStackTrace();
 			}
-		}catch(SQLException e) {
-			e.printStackTrace();
 		}
 		return "";
 	}
@@ -118,12 +121,6 @@ public class UserDAOImpl implements UserDAO {
 	public List<Holding> showAll() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public boolean logout() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }
