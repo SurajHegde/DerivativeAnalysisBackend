@@ -55,11 +55,7 @@ public class UserDAOImpl implements UserDAO {
 		String error = "";
 		try {
 			if (emailExists(emailId)) {
-<<<<<<< HEAD
 				error += " Email ID already exists\n";
-=======
-				return "Email ID already exists";
->>>>>>> 69eb14e71b015e36b707a91ac6d189c8908a127d
 			}
 			
 			if(emailId == "") {
