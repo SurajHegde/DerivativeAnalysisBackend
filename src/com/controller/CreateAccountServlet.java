@@ -1,11 +1,15 @@
 package com.controller;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.dao.UserDAOImpl;
 
 /**
  * Servlet implementation class CreateAccountServlet
@@ -32,7 +36,11 @@ public class CreateAccountServlet extends HttpServlet {
 		String lastName = request.getParameter("lastName");
 		String password = request.getParameter("password");
 		String confirmPassword = request.getParameter("confirmPassword");
-	
+		UserDAOImpl userDao = new UserDAOImpl();
+		String output = userDao.createAccount(emailId, firstName, lastName, password, confirmPassword);
+		System.out.println(output);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+		dispatcher.forward(request, response);
 	}
 
 }
