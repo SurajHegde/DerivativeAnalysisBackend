@@ -51,7 +51,7 @@ SQL> create table holdings(
  10  );
 
 
-SQL> insert into options values('HDFCBANK','CE','26-SEP-19',2140,109.85,250,4.55,29.95,2235.15);
+SQL> insert into options values('HDFCBANK','CE','26-SEP-19',2140,109.85,250,4.55,29.95,2235.15,2243);
 
-SQL> insert into futures values('HDFCBANK','26-SEP-19',2237.00,2243.45,250,2235.15);
+SQL> insert into futures values('HDFCBANK','26-SEP-19',2237.00,2243.45,250,2235.15,2243);
 
