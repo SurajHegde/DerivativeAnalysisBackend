@@ -18,7 +18,7 @@ public class UserDAOImpl implements UserDAO {
 			ps.setString(1, emailId);
 			ResultSet set = ps.executeQuery();
 			
-			if (set == null) {
+			if (set.next()) {
 				return true;
 			}
 		}catch(SQLException e) {
@@ -55,23 +55,23 @@ public class UserDAOImpl implements UserDAO {
 		String error = "";
 		try {
 			if (emailExists(emailId)) {
-				error += " Email ID already exists\n";
+				error += "Email ID already exists\n";
 			}
 			
 			if(emailId == "") {
 				error += "Email ID cannot be empty\n";
 			}
 			if (firstName == "") {
-				error += " First name cannot be empty\n";
+				error += "First name cannot be empty\n";
 			}
 			if (lastName == "") {
-				error += " Last name cannot be empty\n";
+				error += "Last name cannot be empty\n";
 			}
 			if (password.length() < 8) {
-				error += " Password length cannot be lesser than 8\n";
+				error += "Password length cannot be lesser than 8\n";
 			}
 			if (!password.equals(confirmPassword)) {
-				error += " Passwords do not match\n";
+				error += "Passwords do not match\n";
 			}
 			if(!error.equals("")) {
 				return error;
@@ -91,7 +91,27 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public String login(String emailId,String password) {
 		// TODO Auto-generated method stub
-		return "false";
+		if (!emailExists(emailId)) {
+			return "No account has been created with the associated email ID";
+		}
+		String emailPasswordCombo = "select * from users where emailId = ?";
+		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(emailPasswordCombo);){
+			ps.setString(1, emailId);
+			ResultSet set = ps.executeQuery();
+			
+			while (set.next()) {
+				String databasePassword=set.getString("PASSWORD");
+				if (!databasePassword.equals(password)) {
+					return "Invalid credentials";
+				}
+				else {
+					return "Hello "+set.getString("FIRSTNAME")+" "+set.getString("LASTNAME");
+				}
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	@Override
