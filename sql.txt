@@ -1,0 +1,54 @@
+(1) new connection 
+name - derivative
+username - system
+password - system
+
+(2) open mysql command prompt
+
+
+connect system/system;
+
+create table user_info(email_id varchar(30) primary key, password varchar(3
+0), first_name varchar(30), last_name varchar(30));
+
+SQL> create table futures(
+  2  symbol varchar(20),
+  3  position varchar(5),
+  4  expiry_date date,
+  5  strike_price number(8,2),
+  6  ltp number(8,2),
+  7  lot_size number(8,2)
+  8  );
+
+
+SQL> create table options(
+  2  symbol varchar(20),
+  3  type varchar(2),
+  4  expiry_date date,
+  5  strike_price number(8,2),
+  6  ltp number(8,2),
+  7  lot_size number(8,2),
+  8  premium number(8,2),
+  9  volatility number(8,2),
+ 10  LCP number(8,2)
+ 11  );
+
+
+
+SQL> create table holdings(
+  2  email_id varchar(30) references user_info(email_id),
+  3  symbol varchar(20),
+  4  type varchar(3),
+  5  position varchar(5),
+  6  expiry_date date,
+  7  strike_price number(8,2),
+  8  lots int,
+  9  premium number(8,2),
+ 11  LCP number(8,2)
+ 10  );
+
+
+SQL> insert into options values('HDFCBANK','CE','26-SEP-19',2140,109.85,250,4.55,29.95,2235.15);
+
+SQL> insert into futures values('HDFCBANK','26-SEP-19',2237.00,2243.45,250,2235.15);
+
