@@ -19,7 +19,7 @@ SQL> create table futures(
   6  ltp number(8,2),
   7  lot_size number(8,2),
   8  lcp number(8,2),
-  9  underlying_value number(8,2)
+  9  underlying_price number(8,2)
  10  );
 
 
@@ -33,7 +33,7 @@ SQL> create table options(
   8  premium number(8,2),
   9  volatility number(8,2),
  10  LCP number(8,2),
- 11  underlying_value number(8,2)
+ 11  underlying_price number(8,2)
  12  );
 
 
