@@ -52,32 +52,40 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public String createAccount(String emailId,String firstName,String lastName,String password,String confirmPassword) {
 		// TODO Auto-generated method stub
+		String error = "";
 		try {
-			if (!emailExists(emailId)) {
-				return "Email ID already exists";
+			if (emailExists(emailId)) {
+				error += " Email ID already exists\n";
 			}
-			else if (firstName == "") {
-				return "First name cannot be empty";
+			
+			if(emailId == "") {
+				error += "Email ID cannot be empty\n";
 			}
-			else if (lastName == "") {
-				return "Last name cannot be empty";
+			if (firstName == "") {
+				error += " First name cannot be empty\n";
 			}
-			else if (password.length( )< 8) {
-				return "Password length cannot be lesser than 8";
+			if (lastName == "") {
+				error += " Last name cannot be empty\n";
 			}
-			else if (!password.equals(confirmPassword)) {
-				return "Passwords do not match";
+			if (password.length() < 8) {
+				error += " Password length cannot be lesser than 8\n";
 			}
-			else if (addUser(emailId,firstName,lastName,password)) {
-				return "User was registered successfully";
+			if (!password.equals(confirmPassword)) {
+				error += " Passwords do not match\n";
+			}
+			if(!error.equals("")) {
+				return error;
+			}
+			if (addUser(emailId,firstName,lastName,password)) {
+				return "User was registered successfully\n";
 			}
 			else {
-				return "Registration was not completed at this time";
+				return " Registration was not completed";
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "";
+		return error;
 	}
 
 	@Override
