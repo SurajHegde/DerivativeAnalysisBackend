@@ -12,6 +12,8 @@ public class Derivative {
 	protected double underlyingValue;
 	protected String view;
 	protected double volatility;
+	protected double lotSize;
+	protected int numLots;
 	
 	public Derivative() {
 		this.securityName = "";

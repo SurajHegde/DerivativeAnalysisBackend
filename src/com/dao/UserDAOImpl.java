@@ -7,15 +7,15 @@ import com.pojo.Holding;
 public class UserDAOImpl implements UserDAO {
 
 	@Override
-	public boolean createAccount() {
+	public String createAccount(String emailId,String firstName,String lastName,String password,String confirmPassword) {
 		// TODO Auto-generated method stub
-		return false;
+		return "false";
 	}
 
 	@Override
-	public boolean login() {
+	public String login(String emailId,String password) {
 		// TODO Auto-generated method stub
-		return false;
+		return "false";
 	}
 
 	@Override
