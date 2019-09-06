@@ -62,7 +62,7 @@ public class UserDAOImpl implements UserDAO {
 			else if (lastName == "") {
 				return "Last name cannot be empty";
 			}
-			else if (password.length()<8) {
+			else if (password.length( )< 8) {
 				return "Password length cannot be lesser than 8";
 			}
 			else if (!password.equals(confirmPassword)) {
