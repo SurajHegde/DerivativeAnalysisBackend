@@ -4,10 +4,9 @@ import com.pojo.Output;
 
 public class CalculatePLLogic {
 	
-	Output o = new Output();
-	
 	public Output calculatePL(double underlyingPrice, double strikePrice, double premium, String position, String type, int lotSize, int numLot, double LTP, double avgPrice)
 	{
+		Output o = new Output();
 		double payoff=0d, breakeven=0d, maxProfit=0d, maxLoss=0d;
 		
 		switch(type)

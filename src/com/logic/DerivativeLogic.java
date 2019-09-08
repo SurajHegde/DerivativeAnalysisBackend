@@ -30,21 +30,37 @@ public class DerivativeLogic {
 		List<Pair> coordinateList = new ArrayList<>();
 
 		Collections.sort(holdingList,(h1,h2) -> ((int) (h1.getStrikePrice() - h2.getStrikePrice())));
-
+		
+		CalculatePLLogic payoffCalc = new CalculatePLLogic();
+		double netPL = 0.0;
+		
+		for (Holding holding:holdingList) {
+			netPL+= payoffCalc.calculatePL(0, holding.getStrikePrice(), holding.getPremium(), holding.getPosition(), holding.getType(), holding.getLotSize(), holding.getNumLots(), 0, holding.getAvgPrice()).getPayoff(); 
+		}
+		
+		coordinateList.add(new Pair(0.0, netPL));
+		
 		for (int i=0;i<holdingList.size();i++) {
 			if (i<holdingList.size()-1) {	
 				if (holdingList.get(i).getStrikePrice() == holdingList.get(i+1).getStrikePrice()) {
 					continue;
 				}
 			}
-			double netPL = 0.0;
+			netPL = 0.0;
 			for (Holding holding:holdingList) {
-				CalculatePLLogic payoffCalc = new CalculatePLLogic();
 				netPL+= payoffCalc.calculatePL(holdingList.get(i).getStrikePrice(), holding.getStrikePrice(), holding.getPremium(), holding.getPosition(), holding.getType(), holding.getLotSize(), holding.getNumLots(), holdingList.get(i).getStrikePrice(), holding.getAvgPrice()).getPayoff(); 
 			}
 			coordinateList.add(new Pair(holdingList.get(i).getStrikePrice(),netPL));	
 
 		}
+		
+		netPL = 0.0;
+		
+		for (Holding holding:holdingList) {
+			netPL+= payoffCalc.calculatePL(999999d, holding.getStrikePrice(), holding.getPremium(), holding.getPosition(), holding.getType(), holding.getLotSize(), holding.getNumLots(), 999999d, holding.getAvgPrice()).getPayoff(); 
+		}
+		
+		coordinateList.add(new Pair(999999d, netPL));
 
 		return coordinateList;
 	}	
