@@ -1,12 +1,11 @@
 (1) new connection 
-name - derivative
 username - system
-password - system
+password - abcd123
 
 (2) open mysql command prompt
 
 
-connect system/system;
+connect system/abcd123;
 
 create table users(emailid varchar(30) primary key, password varchar(3
 0), firstname varchar(30), lastname varchar(30));
