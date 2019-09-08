@@ -19,13 +19,13 @@ import com.pojo.Holding;
  * Servlet implementation class GetUserHoldings
  */
 @WebServlet("/GetUserHoldings")
-public class GetUserHoldings extends HttpServlet {
+public class GetUserHoldingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetUserHoldings() {
+    public GetUserHoldingServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

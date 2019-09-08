@@ -11,6 +11,7 @@
 <body>
 <h3 align = "center">Welcome <c:out value="${sessionScope.name}"><br></c:out>
 <c:out value="${sessionScope.email}"></c:out></h1>
+<a href="GetUserHoldings" method = "get">User holdings</a>
 
 </body>
 </html>

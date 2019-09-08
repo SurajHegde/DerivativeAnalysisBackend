@@ -123,7 +123,7 @@ public class UserDAOImpl implements UserDAO {
 	public List<Holding> getAllHoldings(String emailId) {
 		// TODO Auto-generated method stub
 		List<Holding> allUserHoldings = new ArrayList<Holding>();
-		String GET_HOLDINGS_USER = "select * from holdings where emailId = ?";
+		String GET_HOLDINGS_USER = "select * from holdings where emailid = ?";
 		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_HOLDINGS_USER);){
 			ps.setString(1,emailId);
 			ResultSet set = ps.executeQuery();
@@ -141,7 +141,7 @@ public class UserDAOImpl implements UserDAO {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-			return allUserHoldings;
+		return allUserHoldings;
 	}
 
 }
