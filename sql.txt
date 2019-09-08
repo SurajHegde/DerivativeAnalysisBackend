@@ -46,7 +46,8 @@ SQL> create table holdings(
   7  strike_price number(8,2),
   8  lots int,
   9  premium number(8,2),
- 11  LCP number(8,2)
+ 11  LCP number(8,2),
+ 12  avg_price number(8,2)
  10  );
 
 
