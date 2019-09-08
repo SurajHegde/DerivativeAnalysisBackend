@@ -12,7 +12,7 @@ public class Derivative {
 	private double underlyingValue;
 	private String view;
 	private double volatility;
-	private double lotSize;
+	private int lotSize;
 	private int numLots;
 	private double premium;
 	
@@ -32,7 +32,7 @@ public class Derivative {
 		this.premium = 0;
 	}
 	public Derivative(String securityName, String type, String position, double strikePrice, String symbol, String isin,
-			Date expiryDate, double underlyingValue, String view, double volatility,double lotSize,int numLots,double premium) {
+			Date expiryDate, double underlyingValue, String view, double volatility,int lotSize,int numLots,double premium) {
 		super();
 		this.securityName = securityName;
 		this.type = type;
@@ -103,10 +103,10 @@ public class Derivative {
 	public void setUnderlyingValue(double underlyingValue) {
 		this.underlyingValue = underlyingValue;
 	}
-	public double getLotSize() {
+	public int getLotSize() {
 		return lotSize;
 	}
-	public void setLotSize(double lotSize) {
+	public void setLotSize(int lotSize) {
 		this.lotSize = lotSize;
 	}
 	public int getNumLots() {
