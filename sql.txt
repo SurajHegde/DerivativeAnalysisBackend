@@ -8,8 +8,8 @@ password - system
 
 connect system/system;
 
-create table user_info(email_id varchar(30) primary key, password varchar(3
-0), first_name varchar(30), last_name varchar(30));
+create table users(emailid varchar(30) primary key, password varchar(3
+0), firstname varchar(30), lastname varchar(30));
 
 SQL> create table futures(
   2  symbol varchar(20),
@@ -39,7 +39,7 @@ SQL> create table options(
 
 
 SQL> create table holdings(
-  2  email_id varchar(30) references user_info(email_id),
+  2  emailid varchar(30) references users(emailid),
   3  symbol varchar(20),
   4  type varchar(3),
   5  position varchar(5),
@@ -53,5 +53,5 @@ SQL> create table holdings(
 
 SQL> insert into options values('HDFCBANK','CE','26-SEP-19',2140,109.85,250,4.55,29.95,2235.15,2243);
 
-SQL> insert into futures values('HDFCBANK','26-SEP-19',2237.00,2243.45,250,2235.15,2243);
+SQL> insert into futures values('HDFCBANK','LONG','26-SEP-19',2237.00,2243.45,250,2235.15,2243);
 
