@@ -14,8 +14,13 @@ public class DerivativeLogic {
 	private double calcMaxLoss() {
 		return 0;
 	}
-	private double calcBreakeven() {
-		return 0;
+	private List<Double> calcBreakeven(List<Pair> coordinateList) {
+		List<Double> breakEvenPoints = new ArrayList<>();
+		for (int i=0;i<(coordinateList.size()-1);i++) {
+			double distance = (coordinateList.get(i+1).getX()-coordinateList.get(i).getX())*Math.abs(coordinateList.get(i).getY()/(coordinateList.get(i+1).getY()-coordinateList.get(i).getY()));
+			breakEvenPoints.add((coordinateList.get(i).getX()+distance));
+		}
+		return breakEvenPoints;
 	}
 	private double calcFairPrice() {
 		return 0;
