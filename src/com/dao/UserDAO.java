@@ -7,6 +7,6 @@ public interface UserDAO {
 	boolean addUser(String emailId,String firstName,String lastName,String password);
 	String createAccount(String emailId,String firstName,String lastName,String password,String confirmPassword);
 	String login(String emailId,String password);
-	List<Holding> showAll();
+	List<Holding> getAllHoldings(String emailId);
 
 }

@@ -9,7 +9,8 @@
 <title>Welcome</title>
 </head>
 <body>
-<h3 align = "center">Welcome <c:out value="${sessionScope.name}"></c:out></h1>
+<h3 align = "center">Welcome <c:out value="${sessionScope.name}"><br></c:out>
+<c:out value="${sessionScope.email}"></c:out></h1>
 
 </body>
 </html>

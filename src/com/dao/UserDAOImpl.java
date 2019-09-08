@@ -3,6 +3,7 @@ package com.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import com.connection.MyConnection;
 
@@ -117,10 +118,30 @@ public class UserDAOImpl implements UserDAO {
 		return "";
 	}
 
+
 	@Override
-	public List<Holding> showAll() {
+	public List<Holding> getAllHoldings(String emailId) {
 		// TODO Auto-generated method stub
-		return null;
+		List<Holding> allUserHoldings = new ArrayList<Holding>();
+		String GET_HOLDINGS_USER = "select * from holdings where emailId = ?";
+		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_HOLDINGS_USER);){
+			ps.setString(1,emailId);
+			ResultSet set = ps.executeQuery();
+			while(set.next()) {
+				Holding userHolding = new Holding();
+				userHolding.setAvgPrice(set.getDouble("avg_price"));
+				userHolding.setSymbol(set.getString("symbol"));
+				userHolding.setType(set.getString("type"));
+				userHolding.setPosition(set.getString("position"));
+				userHolding.setExpiryDate(set.getDate("expiry_date"));
+				userHolding.setNumLots(set.getInt("lots"));
+				userHolding.setPremium(set.getDouble("premium"));
+				allUserHoldings.add(userHolding);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+			return allUserHoldings;
 	}
 
 }

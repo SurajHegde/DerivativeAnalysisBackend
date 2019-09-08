@@ -1,6 +1,8 @@
 package com.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,18 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.dao.UserDAOImpl;
+import com.pojo.Holding;
 
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class GetUserHoldings
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/GetUserHoldings")
+public class GetUserHoldings extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public GetUserHoldings() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,8 +35,13 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-//		response.getWriter().append("Served at: ").append(request.getContextPath());
-		
+		HttpSession httpSession = request.getSession();
+		String emailId = (String) httpSession.getAttribute("email");
+		UserDAOImpl userDao = new UserDAOImpl();
+		List<Holding> allUserHoldings = userDao.getAllHoldings(emailId);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("showAllHoldings.jsp");
+		httpSession.setAttribute("allUserHoldings",allUserHoldings);
+		dispatcher.forward(request, response);
 	}
 
 	/**
@@ -41,25 +49,7 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String emailId = request.getParameter("emailId");
-		String password = request.getParameter("password");
-		UserDAOImpl userDao = new UserDAOImpl();
-		String output = userDao.login(emailId,password);
-		if(output.equals("Invalid credentials") || output.equals("No account with such an email exists")) {
-			System.out.println(output);
-			request.setAttribute("loginErrorMessage", output);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
-			dispatcher.forward(request, response);
-		} else {
-			HttpSession httpSession = request.getSession();
-			httpSession.setAttribute("name", output);
-			httpSession.setAttribute("email", emailId);
-			System.out.println("Logging in user: " + output);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("welcome.jsp");
-			dispatcher.forward(request, response);
-		}
-		
-		
+		doGet(request, response);
 	}
 
 }
