@@ -1,5 +1,7 @@
 package com.controller;
+import com.pojo.Holding;
 
+import java.util.ArrayList;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
@@ -54,6 +56,7 @@ public class LoginServlet extends HttpServlet {
 			HttpSession httpSession = request.getSession();
 			httpSession.setAttribute("name", output);
 			httpSession.setAttribute("email", emailId);
+			httpSession.setAttribute("holdingList", new ArrayList<Holding>());
 			System.out.println("Logging in user: " + output);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("welcome.jsp");
 			dispatcher.forward(request, response);
