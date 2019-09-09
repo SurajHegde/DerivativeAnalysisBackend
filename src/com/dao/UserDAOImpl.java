@@ -135,7 +135,9 @@ public class UserDAOImpl implements UserDAO {
 				userHolding.setPosition(set.getString("position"));
 				userHolding.setExpiryDate(set.getString("expiry_date"));
 				userHolding.setNumLots(set.getInt("lots"));
+				userHolding.setLotSize(set.getInt("lot_size"));
 				userHolding.setPremium(set.getDouble("premium"));
+				userHolding.setStrikePrice(set.getDouble("strike_price"));
 				allUserHoldings.add(userHolding);
 			}
 		} catch(Exception e) {
@@ -143,5 +145,6 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return allUserHoldings;
 	}
+
 
 }
