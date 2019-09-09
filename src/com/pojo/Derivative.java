@@ -2,7 +2,6 @@ package com.pojo;
 import java.sql.Date;
 
 public class Derivative {
-	private String securityName;
 	private String type;
 	private String position;
 	private double strikePrice;
