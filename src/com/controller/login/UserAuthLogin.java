@@ -43,7 +43,8 @@ public class UserAuthLogin {
 		response.put("message", message);
 		response.put("url", url);
 		response.put("uniqueIdentifier", emailId);
-		response.put("name", output);
+		response.put("firstName", output.split(" ")[0]);
+		response.put("lastName", output.split(" ")[1]);
 		response.put("userHolding", userHoldings);
 		
 		return(response);

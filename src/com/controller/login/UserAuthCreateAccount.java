@@ -19,8 +19,7 @@ public class UserAuthCreateAccount {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	
-	@Path("/CreateAccount")
+
 	public JSONObject createAccount(JSONObject incomingData) {
 		String message;
 		String url;
@@ -46,39 +45,11 @@ public class UserAuthCreateAccount {
 		response.put("message", message);
 		response.put("url", url);
 		response.put("uniqueIdentifier", emailId);
-		response.put("name", firstName+lastName);
+		response.put("firstName", firstName);
+		response.put("lastNname", lastName);
 		response.put("userHolding", userHoldings);
 		
 		return(response);
 	}
 	
-	@Path("/LoginCheck")
-	public JSONObject login(JSONObject incomingData) {
-		String message;
-		String url;
-		List <Holding> userHoldings = null;
-		String emailId = (String) incomingData.get("emailId");
-		String password = (String) incomingData.get("password");
-		
-		UserDAOImpl userDao = new UserDAOImpl();
-		String output = userDao.login(emailId, password);
-		
-		if(output.equals("Invalid credentials") || output.equals("No account with such an email exists")) {
-			message = output;
-			url = "/login";
-		} else {
-			message = "Login Successful";
-			url = "/app/dashboard";
-			userHoldings = userDao.getAllHoldings(emailId);
-		}
-		
-		JSONObject response = new JSONObject();
-		response.put("message", message);
-		response.put("url", url);
-		response.put("uniqueIdentifier", emailId);
-		response.put("name", output);
-		response.put("userHolding", userHoldings);
-		
-		return(response);
-	}
 }
