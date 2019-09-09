@@ -11,10 +11,22 @@ import com.pojo.Holding;
 public class DerivativeLogic {
 
 	public double calcMaxProfit(List<Pair> coordinateList) {
-		return Collections.max(coordinateList,Comparator.comparing(coord -> coord.getY())).getY();
+		double maxProfit = Collections.max(coordinateList,Comparator.comparing(coord -> coord.getY())).getY();
+		if (maxProfit>0) {
+			return maxProfit;
+		}
+		else {
+			return 0d;
+		}
 	}
 	public double calcMaxLoss(List<Pair> coordinateList) {
-		return Collections.min(coordinateList,Comparator.comparing(coord -> coord.getY())).getY();
+		double maxLoss = Collections.min(coordinateList,Comparator.comparing(coord -> coord.getY())).getY();
+		if (maxLoss<0) {
+			return maxLoss;
+		}
+		else {
+			return 0d;
+		}
 	}
 	public List<Double> calcBreakeven(List<Pair> coordinateList) {
 		List<Double> breakEvenPoints = new ArrayList<>();
