@@ -1,6 +1,10 @@
 package com.controller;
+import com.logic.DerivativeLogic;
+import com.logic.Pair;
+import com.pojo.Holding;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,16 +15,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class LogoutServlet
+ * Servlet implementation class GeneratePayoffServlet
  */
-@WebServlet("/LogoutServlet")
-public class LogoutServlet extends HttpServlet {
+@WebServlet("/GeneratePayoffServlet")
+public class GeneratePayoffServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LogoutServlet() {
+    public GeneratePayoffServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,7 +34,16 @@ public class LogoutServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		HttpSession httpSession = request.getSession();
+		List<Holding> holdingList = (List<Holding>) httpSession.getAttribute("holdingList");
+		DerivativeLogic dl = new DerivativeLogic();
+		List<Pair>coordinateList = dl.generatePayoff(holdingList);
+		request.setAttribute("coordinateList",coordinateList);
+//		for(Pair p: coordinateList) {
+//			System.out.println(p.getX() + " " + p.getY());
+//		}
+		RequestDispatcher dispatcher = request.getRequestDispatcher("generatePayoff.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**
@@ -38,12 +51,7 @@ public class LogoutServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//doGet(request, response);
-		HttpSession httpSession = request.getSession(false);  
-        httpSession.invalidate();  
- 		RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-		dispatcher.forward(request, response);
-
+		doGet(request, response);
 	}
 
 }

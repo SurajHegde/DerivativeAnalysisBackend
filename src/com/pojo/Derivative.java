@@ -2,18 +2,19 @@ package com.pojo;
 import java.sql.Date;
 
 public class Derivative {
-	protected String securityName;
-	protected String type;
-	protected String position;
-	protected double strikePrice;
-	protected String symbol;
-	protected String isin;
-	protected Date expiryDate;
-	protected double underlyingValue;
-	protected String view;
-	protected double volatility;
-	protected double lotSize;
-	protected int numLots;
+	private String securityName;
+	private String type;
+	private String position;
+	private double strikePrice;
+	private String symbol;
+	private String isin;
+	private Date expiryDate;
+	private double underlyingValue;
+	private String view;
+	private double volatility;
+	private int lotSize;
+	private int numLots;
+	private double premium;
 	
 	public Derivative() {
 		this.securityName = "";
@@ -26,9 +27,12 @@ public class Derivative {
 		this.underlyingValue = 0;
 		this.view = "";
 		this.volatility = 0;
+		this.lotSize = 0;
+		this.numLots = 0;
+		this.premium = 0;
 	}
 	public Derivative(String securityName, String type, String position, double strikePrice, String symbol, String isin,
-			Date expiryDate, double underlyingValue, String view, double volatility) {
+			Date expiryDate, double underlyingValue, String view, double volatility,int lotSize,int numLots,double premium) {
 		super();
 		this.securityName = securityName;
 		this.type = type;
@@ -40,6 +44,16 @@ public class Derivative {
 		this.underlyingValue = underlyingValue;
 		this.view = view;
 		this.volatility = volatility;
+		this.lotSize = lotSize;
+		this.numLots = numLots;
+		this.premium = premium;
+	}
+	
+	public double getPremium() {
+		return premium;
+	}
+	public void setPremium(double premium) {
+		this.premium = premium;
 	}
 	public String getSecurityName() {
 		return securityName;
@@ -88,6 +102,18 @@ public class Derivative {
 	}
 	public void setUnderlyingValue(double underlyingValue) {
 		this.underlyingValue = underlyingValue;
+	}
+	public int getLotSize() {
+		return lotSize;
+	}
+	public void setLotSize(int lotSize) {
+		this.lotSize = lotSize;
+	}
+	public int getNumLots() {
+		return numLots;
+	}
+	public void setNumLots(int numLots) {
+		this.numLots = numLots;
 	}
 	public String getView() {
 		return view;
