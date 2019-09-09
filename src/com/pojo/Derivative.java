@@ -7,7 +7,6 @@ public class Derivative {
 	private String position;
 	private double strikePrice;
 	private String symbol;
-	private String isin;
 	private Date expiryDate;
 	private double underlyingValue;
 	private String view;
@@ -15,14 +14,13 @@ public class Derivative {
 	private int lotSize;
 	private int numLots;
 	private double premium;
+	private double ltp;
 	
 	public Derivative() {
-		this.securityName = "";
 		this.type = "";
 		this.position = "";
 		this.strikePrice = 0;
 		this.symbol = "";
-		this.isin = "";
 		this.expiryDate = null;
 		this.underlyingValue = 0;
 		this.view = "";
@@ -30,16 +28,15 @@ public class Derivative {
 		this.lotSize = 0;
 		this.numLots = 0;
 		this.premium = 0;
+		this.ltp = 0;
 	}
-	public Derivative(String securityName, String type, String position, double strikePrice, String symbol, String isin,
+	public Derivative(String type, String position, double strikePrice, String symbol,
 			Date expiryDate, double underlyingValue, String view, double volatility,int lotSize,int numLots,double premium) {
 		super();
-		this.securityName = securityName;
 		this.type = type;
 		this.position = position;
 		this.strikePrice = strikePrice;
 		this.symbol = symbol;
-		this.isin = isin;
 		this.expiryDate = expiryDate;
 		this.underlyingValue = underlyingValue;
 		this.view = view;
@@ -54,12 +51,6 @@ public class Derivative {
 	}
 	public void setPremium(double premium) {
 		this.premium = premium;
-	}
-	public String getSecurityName() {
-		return securityName;
-	}
-	public void setSecurityName(String securityName) {
-		this.securityName = securityName;
 	}
 	public String getType() {
 		return type;
@@ -84,12 +75,6 @@ public class Derivative {
 	}
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
-	}
-	public String getIsin() {
-		return isin;
-	}
-	public void setIsin(String isin) {
-		this.isin = isin;
 	}
 	public Date getExpiryDate() {
 		return expiryDate;

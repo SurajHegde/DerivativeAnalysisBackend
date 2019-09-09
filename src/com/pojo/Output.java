@@ -2,7 +2,7 @@ package com.pojo;
 
 public class Output {
 	private double breakeven, payoff, maxProfit, maxLoss;
-		
+
 	public double getBreakeven() {
 		return breakeven;
 	}
@@ -27,7 +27,7 @@ public class Output {
 	public void setMaxLoss(double maxLoss) {
 		this.maxLoss = maxLoss;
 	}
-	
+
 	public String toString()
 	{
 		return "\nBreakeven: "+breakeven+
@@ -35,5 +35,5 @@ public class Output {
 				"\nMax Profit: "+maxProfit+
 				"\nMax Loss: "+maxLoss;
 	}
-	
+
 }
