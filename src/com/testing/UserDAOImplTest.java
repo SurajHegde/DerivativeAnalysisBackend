@@ -61,26 +61,11 @@ class UserDAOImplTest {
 		//fail("Not yet implemented");
 		UserDAOImpl daoImpl= new UserDAOImpl();
 		List<Holding> list = daoImpl.getAllHoldings("suraj@123");
-		int actual= list.size();
+		//int actual= list.size();
 
-		assertEquals(2, actual);
-		
-//		List<Holding> expected= new ArrayList<>();
-//		Holding h1 = new Holding();
-//		h1.setAvgPrice(105.25);
-//		h1.setSymbol("YESBANK");
-//		h1.setType("CE");
-//		h1.setPosition("SHORT");
-//		java.util.Date newDate = new Date();
-//		h1.setExpiryDate('19-OCT-2019');
-//		h1.setNumLots(260);
-//		h1.setPremium(6.55);
-//		expected.add(h1);
-//		
-//		//for(Holding h1:)
-		
-		
-	
+		Holding h1=list.get(0);
+		assertEquals(250, h1.getNumLots());
+
 	}
 	
 	@Test
