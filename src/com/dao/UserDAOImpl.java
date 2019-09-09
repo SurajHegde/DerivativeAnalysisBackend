@@ -35,9 +35,9 @@ public class UserDAOImpl implements UserDAO {
 		String addUser = "insert into users values (?,?,?,?)";
 		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(addUser);){
 			ps.setString(1, emailId);
-			ps.setString(2, firstName);
-			ps.setString(3, lastName);
-			ps.setString(4, password);
+			ps.setString(3, firstName);
+			ps.setString(4, lastName);
+			ps.setString(2, password);
 
 			int rows = ps.executeUpdate();
 			if (rows > 0) {
