@@ -15,6 +15,7 @@ public class Derivative {
 	private double premium;
 	private double ltp;
 	
+	
 	public Derivative() {
 		this.type = "";
 		this.position = "";
@@ -111,7 +112,12 @@ public class Derivative {
 	public void setVolatility(double volatility) {
 		this.volatility = volatility;
 	}
-	
+	public double getLtp() {
+		return ltp;
+	}
+	public void setLtp(double ltp) {
+		this.ltp = ltp;
+	}
 	
 	
 }

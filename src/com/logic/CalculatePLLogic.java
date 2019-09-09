@@ -1,63 +1,67 @@
 package com.logic;
 
+
+import com.pojo.Holding;
 import com.pojo.Output;
 
 public class CalculatePLLogic {
 	
-	public Output calculatePL(double underlyingPrice, double strikePrice, double premium, String position, String type, int lotSize, int numLot, double LTP, double avgPrice)
+	
+	
+	public Output calculatePL(Holding h)
 	{
-		Output o = new Output();
 		double payoff=0d, breakeven=0d, maxProfit=0d, maxLoss=0d;
+		Output o = new Output();
 		
-		switch(type)
+		switch(h.getType())
 		{
 		case "CE":
-			if(position.equals("LONG"))
+			if(h.getPosition().equals("LONG"))
 			{
-				payoff = (Math.max((underlyingPrice - strikePrice),0d) - premium)*numLot*lotSize;	
-				breakeven = premium+strikePrice;
+				payoff = (Math.max((h.getUnderlyingValue() - h.getStrikePrice()),0d) - h.getPremium())*h.getNumLots()*h.getLotSize();	
+				breakeven = h.getPremium()+h.getStrikePrice();
 				maxProfit = Double.POSITIVE_INFINITY;
-				maxLoss = premium*numLot*lotSize;
+				maxLoss = h.getPremium()*h.getNumLots()*h.getLotSize();
 			}
-			else if(position.equals("SHORT"))
+			else if(h.getPosition().equals("SHORT"))
 			{
-				payoff = - ((Math.max((underlyingPrice - strikePrice),0d) - premium))*numLot*lotSize;
-				breakeven = premium+strikePrice;
-				maxProfit = premium*numLot*lotSize;
+				payoff = - ((Math.max((h.getUnderlyingValue() - h.getStrikePrice()),0d) - h.getPremium()))*h.getNumLots()*h.getLotSize();
+				breakeven = h.getPremium()+h.getStrikePrice();
+				maxProfit = h.getPremium()*h.getNumLots()*h.getLotSize();
 				maxLoss = Double.NEGATIVE_INFINITY ;
 			}
 			break;
 			
 		case "PE":
-			if(position.equals("LONG"))
+			if(h.getPosition().equals("LONG"))
 			{
-				payoff = (Math.max((strikePrice-underlyingPrice), 0) - premium)*numLot*lotSize;
-				breakeven = strikePrice - premium;
-				maxProfit = (strikePrice - premium)*numLot*lotSize;
-				maxLoss = premium*numLot*lotSize;
+				payoff = (Math.max((h.getStrikePrice()-h.getUnderlyingValue()), 0) - h.getPremium())*h.getNumLots()*h.getLotSize();
+				breakeven = h.getStrikePrice() - h.getPremium();
+				maxProfit = (h.getStrikePrice() - h.getPremium())*h.getNumLots()*h.getLotSize();
+				maxLoss = h.getPremium()*h.getNumLots()*h.getLotSize();
 			}
-			else if(position.equals("SHORT"))
+			else if(h.getPosition().equals("SHORT"))
 			{
-				payoff = - ((Math.max((strikePrice-underlyingPrice), 0) - premium))*numLot*lotSize;
-				breakeven = strikePrice - premium;
-				maxProfit = premium*numLot*lotSize;
-				maxLoss = (strikePrice - premium)*numLot*lotSize;
+				payoff = - ((Math.max((h.getStrikePrice()-h.getUnderlyingValue()), 0) - h.getPremium()))*h.getNumLots()*h.getLotSize();
+				breakeven = h.getStrikePrice() - h.getPremium();
+				maxProfit = h.getPremium()*h.getNumLots()*h.getLotSize();
+				maxLoss = (h.getStrikePrice() - h.getPremium())*h.getNumLots()*h.getLotSize();
 			}
 			break;
 			
 		case "FUT":
-			if(position.equals("LONG"))
+			if(h.getPosition().equals("LONG"))
 			{
-				payoff = (LTP - avgPrice)*numLot*lotSize; //avgPrice will be stored in holding table
-				breakeven = avgPrice;
+				payoff = (h.getLtp() - h.getAvgPrice())*h.getNumLots()*h.getLotSize(); //h.getAvgPrice() will be stored in holding table
+				breakeven = h.getAvgPrice();
 				maxProfit = Double.POSITIVE_INFINITY;
-				maxLoss = avgPrice*numLot*lotSize;
+				maxLoss = h.getAvgPrice()*h.getNumLots()*h.getLotSize();
 			}
-			else if(position.equals("SHORT"))
+			else if(h.getPosition().equals("SHORT"))
 			{
-				payoff = - ((LTP - avgPrice))*numLot*lotSize; 
-				breakeven = avgPrice;
-				maxProfit = avgPrice*numLot*lotSize;
+				payoff = - ((h.getLtp() - h.getAvgPrice()))*h.getNumLots()*h.getLotSize(); 
+				breakeven = h.getAvgPrice();
+				maxProfit = h.getAvgPrice()*h.getNumLots()*h.getLotSize();
 				maxLoss = Double.NEGATIVE_INFINITY;
 			}
 			break;
