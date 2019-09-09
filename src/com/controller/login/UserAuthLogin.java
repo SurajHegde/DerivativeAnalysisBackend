@@ -13,7 +13,7 @@ import org.json.simple.JSONObject;
 import com.dao.UserDAOImpl;
 import com.pojo.Holding;
 
-@Path("/LoginCheck")
+@Path("/login")
 public class UserAuthLogin {
 	
 	@POST
