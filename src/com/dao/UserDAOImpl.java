@@ -133,7 +133,7 @@ public class UserDAOImpl implements UserDAO {
 				userHolding.setSymbol(set.getString("symbol"));
 				userHolding.setType(set.getString("type"));
 				userHolding.setPosition(set.getString("position"));
-				userHolding.setExpiryDate(set.getDate("expiry_date"));
+				userHolding.setExpiryDate(set.getString("expiry_date"));
 				userHolding.setNumLots(set.getInt("lots"));
 				userHolding.setPremium(set.getDouble("premium"));
 				allUserHoldings.add(userHolding);

@@ -6,7 +6,7 @@ public class Derivative {
 	private String position;
 	private double strikePrice;
 	private String symbol;
-	private Date expiryDate;
+	private String expiryDate;
 	private double underlyingValue;
 	private String view;
 	private double volatility;
@@ -31,7 +31,7 @@ public class Derivative {
 		this.ltp = 0;
 	}
 	public Derivative(String type, String position, double strikePrice, String symbol,
-			Date expiryDate, double underlyingValue, String view, double volatility,int lotSize,int numLots,double premium) {
+			String expiryDate, double underlyingValue, String view, double volatility,int lotSize,int numLots,double premium) {
 		super();
 		this.type = type;
 		this.position = position;
@@ -76,10 +76,10 @@ public class Derivative {
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
 	}
-	public Date getExpiryDate() {
+	public String getExpiryDate() {
 		return expiryDate;
 	}
-	public void setExpiryDate(Date expiryDate) {
+	public void setExpiryDate(String expiryDate) {
 		this.expiryDate = expiryDate;
 	}
 	public double getUnderlyingValue() {
