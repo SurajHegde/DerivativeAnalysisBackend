@@ -111,5 +111,9 @@ public class Derivative {
 		this.ltp = ltp;
 	}
 	
+	public String toString()
+	{
+		return symbol+strikePrice;
+	}
 	
 }

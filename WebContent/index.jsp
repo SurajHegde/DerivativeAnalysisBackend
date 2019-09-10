@@ -8,6 +8,10 @@
 <a href= "createAcc.jsp">Register</a><br>
 <a href= "login.jsp">Login</a>
 
+<form action="strategy">
+<button> Strategy
+</button></form>
+
 </head>
 <body>
 
