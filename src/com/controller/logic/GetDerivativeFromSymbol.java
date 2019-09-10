@@ -21,8 +21,9 @@ public class GetDerivativeFromSymbol {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	
-	public JSONObject getDerivative(String symbol) {
+	public JSONObject getDerivative(JSONObject incomingData) {
 		DerivativeDAOImpl dl = new DerivativeDAOImpl();
+		String symbol = (String) incomingData.get("value");
 		List<Holding> allHoldingsWithSymbol = dl.getSpecificDerivative(symbol);
 		JSONObject response = new JSONObject();
 		response.put("derivativeList",allHoldingsWithSymbol);
