@@ -40,9 +40,9 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 	}
 	//Check if user has a particular holding
 	@Override
-	public ResultSet checkUserHolding(String emailId, String symbol, String type, String expiryDate,double strikePrice) {
+	public Holding checkUserHolding(String emailId, String symbol, String type, String expiryDate,double strikePrice) {
 		// TODO Auto-generated method stub
-		ResultSet set = null;
+		Holding userHolding = new Holding();
 		String CHECK_HOLDINGS = "select * from holdings where emailid = ? and type = ? and symbol = ? and expiry_date = ? and strike_price = ?";
 		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(CHECK_HOLDINGS);){
 			ps.setString(1, emailId);
@@ -50,15 +50,25 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 			ps.setString(3, symbol);
 			ps.setString(4, expiryDate);
 			ps.setDouble(5, strikePrice);
-			set = ps.executeQuery();
+			ResultSet set = ps.executeQuery();
 			if(set.next()) {
-				return set;
+				userHolding.setAvgPrice(set.getDouble("avg_price"));
+				userHolding.setSymbol(set.getString("symbol"));
+				userHolding.setType(set.getString("type"));
+				userHolding.setPosition(set.getString("position"));
+				userHolding.setExpiryDate(set.getString("expiry_date"));
+				userHolding.setNumLots(set.getInt("lots"));
+				userHolding.setPremium(set.getDouble("premium"));
+				userHolding.setStrikePrice(set.getDouble("strike_price"));
+				userHolding.setLtp(set.getDouble("lcp"));
+				userHolding.setLotSize(set.getInt("lot_size"));
+				return userHolding;
 			}
 
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		return set;
+		return userHolding;
 
 	}
 	//Add holdings if the user does not have them or else update
@@ -66,12 +76,12 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 	public boolean addUserHolding(String emailId,String type, String position, double strikePrice, String symbol,String expiryDate,double lotSize, double lcp,double premium,int numLots,double spotPrice) {
 		// TODO Auto-generated method stub
 		try(Connection conn = MyConnection.openConnection()) {
-			ResultSet set = checkUserHolding(emailId, symbol, type, expiryDate, strikePrice);
-			if(set.next()) {
+			Holding holdings = checkUserHolding(emailId, symbol, type, expiryDate, strikePrice);
+			if(holdings.getSymbol() !="") {
 				boolean rows = updateUserHolding(emailId, type, symbol, position, expiryDate, strikePrice, numLots, spotPrice);
 				return rows;
 			} else {
-				String ADD_HOLDINGS = "insert into holdings(emailid,symbol,type,position,expiry_date,strike_price,lot_size,lots,premium,lcp,avg_price) values ? ? ? ? ? ? ? ? ? ? ? ";
+				String ADD_HOLDINGS = "insert into holdings(emailid,symbol,type,position,expiry_date,strike_price,lot_size,lots,premium,lcp,avg_price) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 				PreparedStatement ps = conn.prepareStatement(ADD_HOLDINGS);
 				ps.setString(1, emailId);
 				ps.setString(2, symbol);
@@ -84,8 +94,10 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 				ps.setDouble(10, lcp);
 				if(type.equals("FUT")) {
 					ps.setDouble(11, spotPrice);
+					ps.setDouble(9, 0);
 				} else {
 					ps.setDouble(9, premium);
+					ps.setDouble(11, 0);
 				}
 				int rows = ps.executeUpdate();
 				if(rows > 0) {
@@ -101,7 +113,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 	}
 	public int deleteHolding(String emailId,String symbol,String type,String expiryDate,double strikePrice) {
 		int rows = 0;
-		String DELETE_HOLDING = "delete from holdings where email = ? and symbol = ? and type = ? and expiryDate = ? and strike_price = ?";
+		String DELETE_HOLDING = "delete from holdings where emailid = ? and symbol = ? and type = ? and expiry_date = ? and strike_price = ?";
 		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(DELETE_HOLDING);){
 			ps.setString(1,emailId);
 			ps.setString(2,symbol);
@@ -121,13 +133,13 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 			double strikePrice, int numLots, double spotPrice) {
 		// TODO Auto-generated method stub
 		try(Connection conn = MyConnection.openConnection()){
-			ResultSet set = checkUserHolding(emailId, symbol, type, expiryDate, strikePrice);
+			Holding holdings = checkUserHolding(emailId, symbol, type, expiryDate, strikePrice);
 			if(type.equals("FUT")) {
 				String UPDATE_FUTURES = "update holdings set lots = ?,avg_price = ?,position = ? where emailid = ? and symbol = ?  and type = ? and strike_price = ? and expiry_date = ?";
 				PreparedStatement ps = conn.prepareStatement(UPDATE_FUTURES);
-				double userAvgPrice = set.getDouble("avg_price");
-				int userLots = set.getInt("lots");
-				String userPosition = set.getString("position");
+				double userAvgPrice = holdings.getAvgPrice();
+				int userLots = holdings.getNumLots();
+				String userPosition = holdings.getPosition();
 				if(userPosition.equals(position)) {
 					userAvgPrice = ((spotPrice * numLots) + (userAvgPrice * userLots)) / (userLots + numLots);
 					userLots += numLots;
@@ -163,9 +175,9 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 			} else {
 				String UPDATE_OPTIONS = "update holdings set lots = ?,premium = ?,position = ? where emailid = ? and symbol = ?  and type = ? and strike_price = ? and expiry_date = ?";
 				PreparedStatement ps = conn.prepareStatement(UPDATE_OPTIONS);
-				double userPremium = set.getDouble("premium");
-				int userLots = set.getInt("lots");
-				String userPosition = set.getString("position");
+				double userPremium = holdings.getPremium();
+				int userLots = holdings.getNumLots();
+				String userPosition = holdings.getPosition();
 				if(userPosition.equals(position)) {
 					userPremium = ((spotPrice * numLots) + (userPremium * userLots)) / (userLots + numLots);
 					userLots += numLots;
