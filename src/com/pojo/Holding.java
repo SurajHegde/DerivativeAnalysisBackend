@@ -13,8 +13,8 @@ public class Holding extends Derivative {
 	}
 	
 	public Holding(String type, String position, double strikePrice, String symbol,
-			String expiryDate, double underlyingValue, String view, double volatility,int lotSize,int numLots,double premium,double avgPrice, double spotPrice) {
-		super(type, position, strikePrice, symbol, expiryDate, underlyingValue, view, volatility, lotSize, numLots, premium);
+			String expiryDate, double underlyingValue, double volatility,int lotSize,int numLots,double premium,double avgPrice, double spotPrice) {
+		super(type, position, strikePrice, symbol, expiryDate, underlyingValue,volatility, lotSize, numLots, premium);
 		this.avgPrice = avgPrice;
 		this.spotPrice = spotPrice;
 	}
