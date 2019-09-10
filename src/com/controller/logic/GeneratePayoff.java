@@ -15,6 +15,7 @@ import com.logic.DerivativeLogic;
 import com.logic.Pair;
 import com.pojo.Holding;
 
+@Path("/generatepayoff")
 public class GeneratePayoff {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
