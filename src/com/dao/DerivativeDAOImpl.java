@@ -38,7 +38,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		}
 		return allUserHoldings;
 	}
-
+	//Check if user has a particular holding
 	@Override
 	public ResultSet checkUserHolding(String emailId, String symbol, String type, String expiryDate,double strikePrice) {
 		// TODO Auto-generated method stub
@@ -61,14 +61,15 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		return set;
 
 	}
-
+	//Add holdings if the user does not have them or else update
 	@Override
 	public boolean addUserHolding(String emailId,String type, String position, double strikePrice, String symbol,String expiryDate,double lotSize, double lcp,double premium,int numLots,double spotPrice) {
 		// TODO Auto-generated method stub
 		try(Connection conn = MyConnection.openConnection()) {
 			ResultSet set = checkUserHolding(emailId, symbol, type, expiryDate, strikePrice);
 			if(set.next()) {
-				updateUserHolding(emailId, type, symbol, position, expiryDate, strikePrice, numLots, spotPrice);
+				boolean rows = updateUserHolding(emailId, type, symbol, position, expiryDate, strikePrice, numLots, spotPrice);
+				return rows;
 			} else {
 				String ADD_HOLDINGS = "insert into holdings(emailid,symbol,type,position,expiry_date,strike_price,lot_size,lots,premium,lcp,avg_price) values ? ? ? ? ? ? ? ? ? ? ? ";
 				PreparedStatement ps = conn.prepareStatement(ADD_HOLDINGS);
@@ -114,7 +115,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		}
 		return rows;
 	}
-
+	//Update user holding
 	@Override
 	public boolean updateUserHolding(String emailId, String type, String symbol, String position, String expiryDate,
 			double strikePrice, int numLots, double spotPrice) {
@@ -203,4 +204,35 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		}
 		return false;
 	}
+
+	
+	/*Function to get list of derivatives for particular symbol,example FUT,CE,PE for HDFC
+	 * 
+	 * */
+	@Override
+	public List<Holding> getSpecificDerivative(String symbol) {
+		// TODO Auto-generated method stub
+		List<Holding> specificDerivative = new ArrayList<Holding>();
+		String GET_DERIVATIVE = "select * from derivatives where symbol = ?";
+		
+		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_DERIVATIVE)){
+			ps.setString(1, symbol);
+			ResultSet set = ps.executeQuery();
+			while(set.next()) {
+				Holding holding = new Holding();
+				holding.setType(set.getString("type"));
+				holding.setExpiryDate(set.getString("expiry_date"));
+				holding.setStrikePrice(set.getDouble("strike_price"));
+				holding.setLtp(set.getDouble("ltp"));
+				holding.setLotSize(set.getInt("lot_size"));
+				holding.setUnderlyingValue(set.getDouble("underlying_value"));
+				holding.setPremium(set.getDouble("premium"));
+				specificDerivative.add(holding);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} 
+		return specificDerivative;
+	}
+
 }

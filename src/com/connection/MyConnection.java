@@ -18,8 +18,7 @@ public class MyConnection {
 		}
 		return conn;
 	}
-	public static void CloseConnection() {
-		Connection conn = openConnection();
+	public static void CloseConnection(Connection conn) {
 		try {
 			conn.close();
 		} catch (SQLException e) {
