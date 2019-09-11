@@ -6,14 +6,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import com.connection.MyConnection;
-
+import com.pojo.Password;
 import com.pojo.Holding;
 
 public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public boolean emailExists(String emailId) {
-
+		
 		// TODO Auto-generated method stub
 		String emailExists = "select * from users where emailId = ?";
 		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(emailExists);){
@@ -32,13 +32,15 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public boolean addUser(String emailId, String firstName, String lastName, String password) {
 		// TODO Auto-generated method stub
-		String addUser = "insert into users values (?,?,?,?)";
+		String addUser = "insert into users values (?,?,?,?,?)";
 		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(addUser);){
+			String salt = Password.generateSalt(512).get();
+			String hashPassword = Password.hashPassword(password, salt).get();
 			ps.setString(1, emailId);
+			ps.setString(2, hashPassword);
 			ps.setString(3, firstName);
 			ps.setString(4, lastName);
-			ps.setString(2, password);
-
+			ps.setString(5,salt);
 			int rows = ps.executeUpdate();
 			if (rows > 0) {
 				return true;
@@ -97,18 +99,20 @@ public class UserDAOImpl implements UserDAO {
 			return "No account with such an email exists";
 		}
 		else {
-			String emailPasswordCombo = "select firstname,lastname,password from users where emailId = ?";
+			String emailPasswordCombo = "select firstname,lastname,password,salt from users where emailId = ?";
 			try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(emailPasswordCombo);){
 				ps.setString(1, emailId);
 				ResultSet set = ps.executeQuery();
 
 				while (set.next()) {
-					String databasePassword=set.getString("password");
-					if (!databasePassword.equals(password)) {
+					String salt = set.getString("salt");
+					String databasePassword = set.getString("password");
+					boolean verifyPassword = Password.verifyPassword(password, databasePassword, salt);
+					if (!verifyPassword) {
 						return "Invalid credentials";
 					}
 					else {
-						return set.getString("firstname") + " " + set.getString("lastname"); 
+						return "Login Successful";
 					}
 				}
 			}catch(SQLException e) {

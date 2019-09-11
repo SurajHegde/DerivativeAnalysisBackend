@@ -78,20 +78,20 @@ class UserDAOImplTest {
 	@Test
 	void testLoginPassword() {
 		UserDAOImpl daoImpl= new UserDAOImpl();
-		String actual=daoImpl.login("nihal@gmail.com", "nihal");
-		assertEquals("Invalid credentials", actual);
+		String actual=daoImpl.login("ut@gmail.com", "16121997");
+		assertEquals("Utkarsh Sharma", actual);
 	}
 	@Test
 	void testLogin() {
 		UserDAOImpl daoImpl= new UserDAOImpl();
-		String actual=daoImpl.login("nihal@gmail.com", "nihal1234");
-		assertEquals("Nihal Chandak", actual);
+		String actual=daoImpl.login("suraj@gmail.com", "25021997");
+		assertEquals("Login Successful", actual);
 	}
 	
 	@Test
 	void testAddUser() {
 		UserDAOImpl daoImpl= new UserDAOImpl();
-		boolean actual=daoImpl.addUser("ut@gmail.com", "Utkarsh", "Sharma", "16121997");
+		boolean actual=daoImpl.addUser("suraj@gmail.com", "Suraj", "Hegde", "25021997");
 		assertEquals(true, actual);
 	}
 	@Test
