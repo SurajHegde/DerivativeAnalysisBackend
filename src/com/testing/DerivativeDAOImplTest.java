@@ -1,10 +1,12 @@
 package com.testing;
 
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 import com.dao.DerivativeDAOImpl;
+import com.pojo.Holding;
 
 class DerivativeDAOImplTest {
 
@@ -44,6 +46,15 @@ class DerivativeDAOImplTest {
 		
 		//boolean actual= daoImpl.addUserHolding("sailimaye@gmail.com", "CE","SHORT",2000, "HDFCBANK", "02-NOV-19",200,11.4, 7.25,4, 100.25);
 		assertEquals(true, actual);
+	}
+	@Test
+	void testGetSpecificDerivative() {
+	
+		DerivativeDAOImpl daoImpl= new DerivativeDAOImpl();
+		List<Holding> actual= daoImpl.getSpecificDerivative("HDFCBANK");
+		Holding h= actual.get(0);
+		assertEquals(207.75, h.getLtp());
+		
 	}
 
 
