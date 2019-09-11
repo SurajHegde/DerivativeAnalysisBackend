@@ -33,7 +33,7 @@ public class GeneratePayoff {
 			
 			if (((String)jsonObject.get("type")).equals("FUT")) {
 				holding.setType((String)jsonObject.get("type"));
-				holding.setPosition((String)jsonObject.get("type"));
+				holding.setPosition((String)jsonObject.get("position"));
 				holding.setNumLots(Integer.parseInt((String)jsonObject.get("quantity")));
 				holding.setAvgPrice(Double.parseDouble((String)jsonObject.get("price")));
 				holding.setStrikePrice(0);
@@ -42,7 +42,7 @@ public class GeneratePayoff {
 			else {
 				holding.setType((String)jsonObject.get("type"));
 				holding.setPremium(Double.parseDouble((String)jsonObject.get("price")));
-				holding.setPosition((String)jsonObject.get("type"));
+				holding.setPosition((String)jsonObject.get("position"));
 				holding.setNumLots(Integer.parseInt((String)jsonObject.get("quantity")));
 				holding.setStrikePrice(Double.parseDouble((String)jsonObject.get("strikePrice")));
 				holding.setLotSize(Integer.parseInt((String)jsonObject.get("lotsize")));
