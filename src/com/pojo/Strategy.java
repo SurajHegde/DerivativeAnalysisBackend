@@ -20,4 +20,6 @@ public class Strategy {
 	{
 		return strategyName+views;
 	}
+	
+	
 }
