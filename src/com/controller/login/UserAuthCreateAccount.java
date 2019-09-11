@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import com.dao.UserDAOImpl;
 import com.pojo.Holding;
 
-@Path("/UserAuth")
+@Path("/create")
 public class UserAuthCreateAccount {
 	
 	@POST
