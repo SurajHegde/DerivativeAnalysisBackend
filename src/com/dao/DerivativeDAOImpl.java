@@ -89,7 +89,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 				ps.setString(4, position);
 				ps.setString(5, expiryDate);
 				ps.setDouble(6, strikePrice);
-				ps.setDouble(7,lotSize);
+				ps.setDouble(7, lotSize);
 				ps.setInt(8, numLots);
 				ps.setDouble(10, lcp);
 				if(type.equals("FUT")) {
@@ -166,7 +166,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 				ps.setString(3, userPosition);
 				ps.setString(4, emailId);
 				ps.setString(5, symbol);
-				ps.setString(6,type);
+				ps.setString(6, type);
 				ps.setString(7, expiryDate);
 				int rows = ps.executeUpdate();
 				if(rows > 0)
@@ -220,7 +220,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		return false;
 	}
 
-	
+
 	/*Function to get list of derivatives for particular symbol,example FUT,CE,PE for HDFC
 	 * 
 	 * */
@@ -229,7 +229,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		// TODO Auto-generated method stub
 		List<Holding> specificDerivative = new ArrayList<Holding>();
 		String GET_DERIVATIVE = "select * from derivatives where symbol = ?";
-		
+
 		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_DERIVATIVE)){
 			ps.setString(1, symbol);
 			ResultSet set = ps.executeQuery();
@@ -249,5 +249,35 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		} 
 		return specificDerivative;
 	}
+	public double getLotSize(String symbol) {
+		String GET_LOT_SIZE = "select lot_size from derivatives where symbol = ?";
+		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_LOT_SIZE);){
+			ps.setString(1, symbol);
+			ResultSet set = ps.executeQuery();
+			double lotSize = set.getDouble("lot_size");
+			return lotSize;
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 
+		return 0;
+	}
+	public double getLCP(String symbol,String type,String expiryDate,double strikePrice) {
+		double spotPrice = 0.0;
+		String FIND_SPOT_PRICE = "SELECT LCP FROM DERIVATIVES WHERE SYMBOL = ? AND TYPE = ? AND EXPIRY_DATE = ? AND STRIKE_PRICE = ?";
+		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(FIND_SPOT_PRICE)){
+			ps.setString(1, symbol);
+			ps.setString(2, type);
+			ps.setString(3, expiryDate);
+			ps.setDouble(4, strikePrice);
+			ResultSet set = ps.executeQuery();
+			while (set.next()) {
+				spotPrice = set.getDouble("ltp");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return spotPrice;
+	}
 }
+

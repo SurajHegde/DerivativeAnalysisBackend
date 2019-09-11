@@ -8,7 +8,7 @@ import java.util.List;
 import com.connection.MyConnection;
 import com.pojo.Password;
 import com.pojo.Holding;
-
+import com.logic.UserHoldingExtraFunctions;
 public class UserDAOImpl implements UserDAO {
 
 	@Override
@@ -150,5 +150,22 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return allUserHoldings;
 	}
-	
+	public List<Double> getGain(List<Holding> userHoldings){
+		List<Double> gainList = new ArrayList<Double>();
+		UserHoldingExtraFunctions extraFun = new UserHoldingExtraFunctions();
+		for(Holding holding : userHoldings) {
+			double spotPrice  = extraFun.getSpotPrice(holding);
+			gainList.add(((spotPrice - holding.getLtp())*holding.getNumLots()*holding.getLotSize())/holding.getLtp());
+		}
+		return gainList;
+	}
+	public List<Double> getGainPercentage(List<Holding> userHoldings){
+		List<Double> gainPercentageList = new ArrayList<Double>();
+		UserHoldingExtraFunctions extraFun = new UserHoldingExtraFunctions();
+		for(Holding holding : userHoldings) {
+			double spotPrice = extraFun.getSpotPrice(holding);
+			gainPercentageList.add(((spotPrice - holding.getLtp())*holding.getNumLots()*holding.getLotSize())/holding.getLtp());
+		}
+		return gainPercentageList;
+	}
 }
