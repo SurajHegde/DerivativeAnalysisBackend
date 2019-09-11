@@ -112,7 +112,7 @@ public class UserDAOImpl implements UserDAO {
 						return "Invalid credentials";
 					}
 					else {
-						return "Login Successful";
+						return set.getString("firstname") + " " + set.getString("lastname");
 					}
 				}
 			}catch(SQLException e) {
