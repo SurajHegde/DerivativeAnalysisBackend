@@ -78,7 +78,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		try(Connection conn = MyConnection.openConnection()) {
 			Holding holdings = checkUserHolding(emailId, symbol, type, expiryDate, strikePrice);
 			if(holdings.getSymbol() !="") {
-				boolean rows = updateUserHolding(emailId, type, symbol, position, expiryDate, strikePrice, numLots, spotPrice);
+				boolean rows = updateUserHolding(emailId, type, symbol, position, expiryDate, strikePrice, numLots, spotPrice,premium);
 				return rows;
 			} else {
 				String ADD_HOLDINGS = "insert into holdings(emailid,symbol,type,position,expiry_date,strike_price,lot_size,lots,premium,lcp,avg_price) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
@@ -88,7 +88,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 				ps.setString(3, type);
 				ps.setString(4, position);
 				ps.setString(5, expiryDate);
-				ps.setDouble(6,strikePrice);
+				ps.setDouble(6, strikePrice);
 				ps.setDouble(7,lotSize);
 				ps.setInt(8, numLots);
 				ps.setDouble(10, lcp);
@@ -130,12 +130,12 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 	//Update user holding
 	@Override
 	public boolean updateUserHolding(String emailId, String type, String symbol, String position, String expiryDate,
-			double strikePrice, int numLots, double spotPrice) {
+			double strikePrice, int numLots, double spotPrice,double premium) {
 		// TODO Auto-generated method stub
 		try(Connection conn = MyConnection.openConnection()){
 			Holding holdings = checkUserHolding(emailId, symbol, type, expiryDate, strikePrice);
 			if(type.equals("FUT")) {
-				String UPDATE_FUTURES = "update holdings set lots = ?,avg_price = ?,position = ? where emailid = ? and symbol = ?  and type = ? and strike_price = ? and expiry_date = ?";
+				String UPDATE_FUTURES = "update holdings set lots = ?,avg_price = ?,position = ? where emailid = ? and symbol = ? and type = ? and expiry_date = ?";
 				PreparedStatement ps = conn.prepareStatement(UPDATE_FUTURES);
 				double userAvgPrice = holdings.getAvgPrice();
 				int userLots = holdings.getNumLots();
@@ -145,7 +145,13 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 					userLots += numLots;
 				} else {
 					if(userLots - numLots != 0) {
-						userAvgPrice = Math.abs(((userAvgPrice * userLots) - (spotPrice * numLots)) / (userLots - numLots));
+						if((userLots - numLots) < 0) {
+							userAvgPrice = spotPrice;
+							if(userPosition.equals("LONG"))
+								userPosition = "SHORT";
+							else
+								userPosition = "LONG";
+						}
 						userLots -= numLots;
 					}else {
 						int rows = deleteHolding(emailId, symbol, type, expiryDate, strikePrice);
@@ -155,18 +161,13 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 							return false;
 					}
 				}
-				ps.setDouble(1, userLots);
+				ps.setDouble(1, Math.abs(userLots));
 				ps.setDouble(2, userAvgPrice);
-				if(userLots > 0)
-					userPosition = "LONG";
-				else
-					userPosition = "SHORT";
 				ps.setString(3, userPosition);
-				ps.setString(4,emailId);
+				ps.setString(4, emailId);
 				ps.setString(5, symbol);
 				ps.setString(6,type);
-				ps.setDouble(7, strikePrice);
-				ps.setString(8, expiryDate);
+				ps.setString(7, expiryDate);
 				int rows = ps.executeUpdate();
 				if(rows > 0)
 					return true;
@@ -183,7 +184,13 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 					userLots += numLots;
 				} else {
 					if(userLots - numLots != 0) {
-						userPremium = Math.abs(((userPremium * userLots) - (spotPrice * numLots)) / (userLots - numLots));
+						if((userLots - numLots) < 0) {
+							userPremium = premium;
+							if(userPosition.equals("LONG"))
+								userPosition = "SHORT";
+							else
+								userPosition = "LONG";
+						}
 						userLots -= numLots;
 					}else {
 						int rows = deleteHolding(emailId, symbol, type, expiryDate, strikePrice);
@@ -193,16 +200,12 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 							return false;
 					}
 				}
-				ps.setDouble(1, userLots);
+				ps.setDouble(1, Math.abs(userLots));
 				ps.setDouble(2, userPremium);
-				if(userLots > 0)
-					userPosition = "LONG";
-				else
-					userPosition = "SHORT";
 				ps.setString(3, userPosition);
 				ps.setString(4, emailId);
 				ps.setString(5, symbol);
-				ps.setString(6,type);
+				ps.setString(6, type);
 				ps.setDouble(7, strikePrice);
 				ps.setString(8, expiryDate);
 				int rows = ps.executeUpdate();

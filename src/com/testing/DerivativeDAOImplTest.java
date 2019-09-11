@@ -20,7 +20,7 @@ class DerivativeDAOImplTest {
 	void testAddUserHolding_new() {
 		DerivativeDAOImpl daoImpl= new DerivativeDAOImpl();
 		//boolean actual= daoImpl.addUserHolding("utkarshsharmaas@gmail.com","CE","LONG",2150,"RELIANCE","29-OCT-19",200,11.4,6.55,5,105.25);
-		boolean actual= daoImpl.addUserHolding("shantanu.vijay8@gmail.com", "PE","LONG",2100, "HDFCBANK", "02-NOV-19",200,11.4, 7.25,4, 100.25);
+		boolean actual= daoImpl.addUserHolding("chandaknihal231@gmail.com", "CE","SHORT",2100, "HDFCBANK", "02-NOV-19",200,11.4, 150,25, 270);
 		assertEquals(true, actual);
 	}
 	
