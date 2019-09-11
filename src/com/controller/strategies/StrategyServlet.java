@@ -15,7 +15,9 @@ import javax.ws.rs.core.MediaType;
 import com.dao.UserDAOImpl;
 import com.logic.StrategyLogic;
 import com.pojo.Derivative;
+import com.pojo.Holding;
 import com.pojo.Strategy;
+import com.pojo.StrategyOutput;
 
 @Path("/strategyservlet")
 
@@ -40,7 +42,7 @@ public class StrategyServlet {
 		StrategyLogic s = new StrategyLogic();
 		strategies = s.getStrategy(symbol,views,expiry_date,target);
 			
-		List<List<Derivative>> l = new ArrayList<>();
+		List<StrategyOutput> l = new ArrayList<>();
 		
 		for(int i=0;i<strategies.size();i++)
 		{

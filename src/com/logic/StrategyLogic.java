@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dao.StrategyDAOImpl;
-import com.pojo.Derivative;
+import com.pojo.Holding ;
 import com.pojo.Strategy;
+import com.pojo.StrategyOutput;
 
 public class StrategyLogic {
 	
@@ -16,15 +17,18 @@ public class StrategyLogic {
 		System.out.println(strategies);
 		return strategies;
 	}
+	// ----------------------------------Bullish Strategies-------------------
 	
-	public List<List<Derivative>> BullCallSpread(String symbol, double target, String expiry_date)
+	
+	public List<StrategyOutput> BullCallSpread(String symbol, double target, String expiry_date)
 	{
-		List<Derivative> list = new ArrayList<Derivative>();
+		List<Holding > list = new ArrayList<Holding >();
 		
-		List<List<Derivative>> fi = new ArrayList<>();
+		List<StrategyOutput> fi = new ArrayList<>();
 		String type = "CE";
 		StrategyDAOImpl s = new StrategyDAOImpl();
-		list = s.getDerivative(symbol, type, expiry_date);
+		DerivativeLogic d = new DerivativeLogic();
+		list = s.getHolding (symbol, type, expiry_date);
 		
 		for(int i=0; i<list.size() ; i++)
 		{
@@ -32,13 +36,27 @@ public class StrategyLogic {
 			{
 				if(list.get(i).getStrikePrice() > target && list.get(j).getStrikePrice() < target)
 				{
-					List<Derivative> semifinal = new ArrayList<>();
+					List<Holding > semifinal = new ArrayList<>();
 					list.get(i).setPosition("SHORT");
 					list.get(j).setPosition("LONG");
+					list.get(i).setType("CE");
+					list.get(j).setType("CE");
 					semifinal.add(list.get(i));
 					semifinal.add(list.get(j));
 					
-					fi.add(semifinal);
+					List<Pair> coordinates = d.generatePayoff(semifinal);
+					double maxProfit = d.calcMaxProfit(coordinates);
+					double maxLoss = d.calcMaxLoss(coordinates);
+					List<Double> breakevens = d.calcBreakeven(coordinates);
+							
+					StrategyOutput so = new StrategyOutput();
+					so.setStrategyName("Bull Call Spread");
+					so.setHoldings(semifinal);
+					so.setMaxProfit(maxProfit);
+					so.setMaxLoss(maxLoss);
+					so.setBreakevens(breakevens);
+					
+					fi.add(so);
 				}
 					
 			}
@@ -47,14 +65,65 @@ public class StrategyLogic {
 		return fi;
 	}
 	
-	public List<List<Derivative>> LongCallButterfly(String symbol, double target, String expiry_date)
+	public List<StrategyOutput> BullPutSpread(String symbol, double target, String expiry_date)
 	{
-		List<Derivative> list = new ArrayList<Derivative>();
+		//moderately bullish
+		List<Holding > list = new ArrayList<Holding >();
 		
-		List<List<Derivative>> fi = new ArrayList<>();
+		List<StrategyOutput> fi = new ArrayList<>();
+		String type = "PE";
 		StrategyDAOImpl s = new StrategyDAOImpl();
+		DerivativeLogic d = new DerivativeLogic();
+		list = s.getHolding(symbol, type, expiry_date);
+		
+		
+		for(int i=0; i<list.size() ; i++)
+		{
+			for(int j=0;j<list.size();j++)
+			{
+				if(list.get(i).getStrikePrice() > target && list.get(j).getStrikePrice() < target)
+				{
+					List<Holding > semifinal = new ArrayList<>();
+					list.get(i).setPosition("LONG");
+					list.get(j).setPosition("SHORT");
+					list.get(i).setType("PE");
+					list.get(j).setType("PE");
+					semifinal.add(list.get(i));
+					semifinal.add(list.get(j));
+					
+					List<Pair> coordinates = d.generatePayoff(semifinal);
+					double maxProfit = d.calcMaxProfit(coordinates);
+					double maxLoss = d.calcMaxLoss(coordinates);
+					List<Double> breakevens = d.calcBreakeven(coordinates);
+							
+					StrategyOutput so = new StrategyOutput();
+					so.setStrategyName("Bull Put Spread");
+					so.setHoldings(semifinal);
+					so.setMaxProfit(maxProfit);
+					so.setMaxLoss(maxLoss);
+					so.setBreakevens(breakevens);
+					
+					fi.add(so);
+				}
+					
+			}
+		}
+
+		return fi;
+	}
+	
+	
+	//------------------------------Neutral-----------------------
+	
+	public List<StrategyOutput> LongCallButterfly(String symbol, double target, String expiry_date)
+	{
+		List<Holding > list = new ArrayList<Holding >();
+		
+		List<StrategyOutput> fi = new ArrayList<>();
+		StrategyDAOImpl s = new StrategyDAOImpl();
+		DerivativeLogic d = new DerivativeLogic();
 		String type = "CE";
-		list = s.getDerivative(symbol, type, expiry_date);
+		list = s.getHolding(symbol, type, expiry_date);
 		
 		for(int i=0; i<list.size() ; i++)
 		{
@@ -67,15 +136,31 @@ public class StrategyLogic {
 							(target-list.get(j).getStrikePrice() == list.get(i).getStrikePrice()-target) &&
 							(list.get(k).getStrikePrice() == target))
 					{
-						List<Derivative> semifinal = new ArrayList<>();
+						List<Holding > semifinal = new ArrayList<>();
 						list.get(i).setPosition("LONG");
 						list.get(j).setPosition("LONG");
 						list.get(k).setPosition("SHORT");
+						list.get(i).setType("CE");
+						list.get(j).setType("CE");
+						list.get(k).setType("CE");
 						semifinal.add(list.get(i));
 						semifinal.add(list.get(j));
 						semifinal.add(list.get(k));
 						semifinal.add(list.get(k));
-						fi.add(semifinal);
+						
+						List<Pair> coordinates = d.generatePayoff(semifinal);
+						double maxProfit = d.calcMaxProfit(coordinates);
+						double maxLoss = d.calcMaxLoss(coordinates);
+						List<Double> breakevens = d.calcBreakeven(coordinates);
+								
+						StrategyOutput so = new StrategyOutput();
+						so.setStrategyName("Long Call Butterfly");
+						so.setHoldings(semifinal);
+						so.setMaxProfit(maxProfit);
+						so.setMaxLoss(maxLoss);
+						so.setBreakevens(breakevens);
+						
+						fi.add(so);
 					}
 				}
 					
@@ -85,14 +170,17 @@ public class StrategyLogic {
 		return fi;
 	}
 	
-	public List<List<Derivative>> BearPutSpread(String symbol, double target, String expiry_date)
+	
+	//-------------------------------Bearish------------------------------
+	public List<StrategyOutput> BearPutSpread(String symbol, double target, String expiry_date)
 	{
-		List<Derivative> list = new ArrayList<Derivative>();
+		List<Holding> list = new ArrayList<Holding>();
 		
-		List<List<Derivative>> fi = new ArrayList<>();
+		List<StrategyOutput> fi = new ArrayList<>();
 		String type = "PE";
 		StrategyDAOImpl s = new StrategyDAOImpl();
-		list = s.getDerivative(symbol, type, expiry_date);
+		DerivativeLogic d = new DerivativeLogic();
+		list = s.getHolding(symbol, type, expiry_date);
 		
 		for(int i=0; i<list.size() ; i++)
 		{
@@ -100,13 +188,27 @@ public class StrategyLogic {
 			{
 				if(list.get(i).getStrikePrice() > target && list.get(j).getStrikePrice() < target)
 				{
-					List<Derivative> semifinal = new ArrayList<>();
+					List<Holding > semifinal = new ArrayList<>();
+					list.get(i).setType("PE");
+					list.get(j).setType("PE");
 					list.get(i).setPosition("LONG");
 					list.get(j).setPosition("SHORT");
 					semifinal.add(list.get(i));
 					semifinal.add(list.get(j));
 					
-					fi.add(semifinal);
+					List<Pair> coordinates = d.generatePayoff(semifinal);
+					double maxProfit = d.calcMaxProfit(coordinates);
+					double maxLoss = d.calcMaxLoss(coordinates);
+					List<Double> breakevens = d.calcBreakeven(coordinates);
+							
+					StrategyOutput so = new StrategyOutput();
+					so.setStrategyName("Bear Put Spread");
+					so.setHoldings(semifinal);
+					so.setMaxProfit(maxProfit);
+					so.setMaxLoss(maxLoss);
+					so.setBreakevens(breakevens);
+					
+					fi.add(so);
 				}
 					
 			}
@@ -115,4 +217,5 @@ public class StrategyLogic {
 		return fi;
 	}
 	
+
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.connection.MyConnection;
 import com.pojo.Derivative;
+import com.pojo.Holding;
 import com.pojo.Strategy;
 
 public class StrategyDAOImpl {
@@ -37,9 +38,9 @@ public class StrategyDAOImpl {
 		return strategies;
 	}
 	
-	public List<Derivative> getDerivative(String symbol, String type, String expiry_date)
+	public List<Holding> getHolding(String symbol, String type, String expiry_date)
 	{
-		List<Derivative> derivatives = new ArrayList();
+		List<Holding> holdings = new ArrayList();
 		
 		String query = "select * from derivatives where symbol=? and type=? and expiry_date=?";
 		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(query);){
@@ -50,7 +51,7 @@ public class StrategyDAOImpl {
 			
 			while(set.next())
 			{
-				Derivative d = new Derivative();
+				Holding d = new Holding();
 				d.setStrikePrice(set.getDouble("strike_price"));
 				d.setLotSize(set.getInt("lot_size"));
 				d.setLtp(set.getDouble("ltp"));
@@ -58,7 +59,7 @@ public class StrategyDAOImpl {
 				d.setPremium(set.getDouble("premium"));
 				d.setUnderlyingValue(set.getDouble("underlying_value"));
 				
-				derivatives.add(d);
+				holdings.add(d);
 				
 			}
 		
@@ -67,6 +68,6 @@ public class StrategyDAOImpl {
 		}
 		
 		
-		return derivatives;
+		return holdings;
 	}
 }
