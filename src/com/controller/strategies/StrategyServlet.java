@@ -32,12 +32,12 @@ public class StrategyServlet {
 	public JSONObject login(JSONObject incomingData) {
 		
 		String message;
-		String url;
+		String url = "/strategyservlet";
 		String symbol = (String) incomingData.get("symbol");
 		String views = (String) incomingData.get("views");
 		String expiry_date = (String) incomingData.get("targetDate");
-		double target = (double) incomingData.get("target");
-				
+		String temp=(String)incomingData.get("target");
+		double target = Double.parseDouble(temp);		
 		List<Strategy> strategies = new ArrayList<>();
 		StrategyLogic s = new StrategyLogic();
 		strategies = s.getStrategy(symbol,views,expiry_date,target);
@@ -63,7 +63,80 @@ public class StrategyServlet {
 				l = s.BearPutSpread(symbol, target, expiry_date);
 				System.out.println(l);
 				break;
+				
+			case "Long Straddle":
+				l = s.LongStraddle(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Short Straddle":
+				l = s.ShortStraddle(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Long Call Condor":
+				l = s.LongCallCondor(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Short Call Condor":
+				l = s.ShortCallCondor(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Short Call Butterfly":
+				l = s.ShortCallButterfly(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Long Strangle":
+				l = s.LongStrangle(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Short Strangle":
+				l = s.ShortStrangle(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+					
+			case "Long Call":
+				l = s.LongCall(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Short Put":
+				l = s.ShortPut(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Bull Put Spread":
+				l = s.BullPutSpread(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Long Combo":
+				l = s.LongCombo(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Bear Long Put":
+				l = s.BearLongPut(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Bear Short Call":
+				l = s.BearShortCall(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
+			case "Bear Call Spread":
+				l = s.BearCallSpread(symbol, target, expiry_date);
+				System.out.println(l);
+				break;
+				
 			}
+			
+			
 		}
 		
 		for(int i=0;i<l.size(); i++)
