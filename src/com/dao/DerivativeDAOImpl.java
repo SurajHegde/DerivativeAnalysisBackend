@@ -229,11 +229,13 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		// TODO Auto-generated method stub
 		List<Holding> specificDerivative = new ArrayList<Holding>();
 		String GET_DERIVATIVE = "select * from derivatives where symbol = ?";
-
+		System.out.println(symbol);
+		
 		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_DERIVATIVE)){
 			ps.setString(1, symbol);
 			ResultSet set = ps.executeQuery();
 			while(set.next()) {
+				System.out.println("inside while");
 				Holding holding = new Holding();
 				holding.setType(set.getString("type"));
 				holding.setExpiryDate(set.getString("expiry_date"));
