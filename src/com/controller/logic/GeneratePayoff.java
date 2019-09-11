@@ -1,5 +1,6 @@
 package com.controller.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -21,35 +22,33 @@ public class GeneratePayoff {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	
-	public JSONObject generatePayoff(JSONObject incomingData) {
+	public JSONObject generatePayoff(List<JSONObject> incomingData) {
 		
 		String message;
 		String url = "/app/analysis";
-		List<Holding> holdingList = (List) incomingData.get("holdingList");
+		List<Holding> holdingList = new ArrayList<>();;
 		
-//		List<JSONObject> jsonObjectList = (List) incomingData.get("holdingList");
-//		for (JSONObject jsonObject:jsonObjectList) {
-//			Holding holding = new Holding();
-//			String[] symbol = ((String)jsonObject.get("instrument")).split(" ");
-//			
-//			if (symbol.length==2) {
-//				holding.setPosition((String)jsonObject.get("type"));
-//				holding.setNumLots((int)jsonObject.get("quantity"));
-//				holding.setAvgPrice((double)jsonObject.get("price"));
-//				holding.setStrikePrice(0);
-//				holding.setLotSize((int)jsonObject.get("lotsize"));
-//			}
-//			else {
-//				holding.setPremium((double)jsonObject.get("price"));
-//				holding.setPosition((String)jsonObject.get("type"));
-//				holding.setNumLots((int)jsonObject.get("quantity"));
-//				holding.setStrikePrice(Double.parseDouble(symbol[1]));
-//				holding.setLotSize((int)jsonObject.get("lotsize"));
-//			}
-//			
-//			holdingList.add(holding);	
-//		}
-//		
+		for (JSONObject jsonObject:incomingData) {
+			Holding holding = new Holding();
+			
+			if (((String)jsonObject.get("type")).equals("FUT")) {
+				holding.setPosition((String)jsonObject.get("type"));
+				holding.setNumLots(Integer.parseInt((String)jsonObject.get("quantity")));
+				holding.setAvgPrice(Double.parseDouble((String)jsonObject.get("price")));
+				holding.setStrikePrice(0);
+				holding.setLotSize(Integer.parseInt((String)jsonObject.get("lotsize")));
+			}
+			else {
+				holding.setPremium(Double.parseDouble((String)jsonObject.get("price")));
+				holding.setPosition((String)jsonObject.get("type"));
+				holding.setNumLots(Integer.parseInt((String)jsonObject.get("quantity")));
+				holding.setStrikePrice(Double.parseDouble((String)jsonObject.get("strikePrice")));
+				holding.setLotSize(Integer.parseInt((String)jsonObject.get("lotsize")));
+			}
+			
+			holdingList.add(holding);	
+		}
+		
 		JSONObject response = new JSONObject();
 		
 		DerivativeLogic dlogic = new DerivativeLogic();
