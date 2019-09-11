@@ -2,50 +2,52 @@ package com.pojo;
 import java.sql.Date;
 
 public class Derivative {
-	protected String securityName;
-	protected String type;
-	protected String position;
-	protected double strikePrice;
-	protected String symbol;
-	protected String isin;
-	protected Date expiryDate;
-	protected double underlyingValue;
-	protected String view;
-	protected double volatility;
-	protected double lotSize;
-	protected int numLots;
+	private String type;
+	private String position;
+	private double strikePrice;
+	private String symbol;
+	private String expiryDate;
+	private double underlyingValue;
+	private double volatility;
+	private int lotSize;
+	private int numLots;
+	private double premium;
+	private double ltp;
+	
 	
 	public Derivative() {
-		this.securityName = "";
 		this.type = "";
 		this.position = "";
 		this.strikePrice = 0;
 		this.symbol = "";
-		this.isin = "";
 		this.expiryDate = null;
 		this.underlyingValue = 0;
-		this.view = "";
 		this.volatility = 0;
+		this.lotSize = 0;
+		this.numLots = 0;
+		this.premium = 0;
+		this.ltp = 0;
 	}
-	public Derivative(String securityName, String type, String position, double strikePrice, String symbol, String isin,
-			Date expiryDate, double underlyingValue, String view, double volatility) {
+	public Derivative(String type, String position, double strikePrice, String symbol,
+			String expiryDate, double underlyingValue,double volatility,int lotSize,int numLots,double premium) {
 		super();
-		this.securityName = securityName;
 		this.type = type;
 		this.position = position;
 		this.strikePrice = strikePrice;
 		this.symbol = symbol;
-		this.isin = isin;
 		this.expiryDate = expiryDate;
 		this.underlyingValue = underlyingValue;
-		this.view = view;
 		this.volatility = volatility;
+		this.lotSize = lotSize;
+		this.numLots = numLots;
+		this.premium = premium;
 	}
-	public String getSecurityName() {
-		return securityName;
+	
+	public double getPremium() {
+		return premium;
 	}
-	public void setSecurityName(String securityName) {
-		this.securityName = securityName;
+	public void setPremium(double premium) {
+		this.premium = premium;
 	}
 	public String getType() {
 		return type;
@@ -71,16 +73,10 @@ public class Derivative {
 	public void setSymbol(String symbol) {
 		this.symbol = symbol;
 	}
-	public String getIsin() {
-		return isin;
-	}
-	public void setIsin(String isin) {
-		this.isin = isin;
-	}
-	public Date getExpiryDate() {
+	public String getExpiryDate() {
 		return expiryDate;
 	}
-	public void setExpiryDate(Date expiryDate) {
+	public void setExpiryDate(String expiryDate) {
 		this.expiryDate = expiryDate;
 	}
 	public double getUnderlyingValue() {
@@ -89,19 +85,35 @@ public class Derivative {
 	public void setUnderlyingValue(double underlyingValue) {
 		this.underlyingValue = underlyingValue;
 	}
-	public String getView() {
-		return view;
+	public int getLotSize() {
+		return lotSize;
 	}
-	public void setView(String view) {
-		this.view = view;
+	public void setLotSize(int lotSize) {
+		this.lotSize = lotSize;
 	}
+	public int getNumLots() {
+		return numLots;
+	}
+	public void setNumLots(int numLots) {
+		this.numLots = numLots;
+	}
+
 	public double getVolatility() {
 		return volatility;
 	}
 	public void setVolatility(double volatility) {
 		this.volatility = volatility;
 	}
+	public double getLtp() {
+		return ltp;
+	}
+	public void setLtp(double ltp) {
+		this.ltp = ltp;
+	}
 	
-	
+	public String toString()
+	{
+		return symbol+strikePrice;
+	}
 	
 }
