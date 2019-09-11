@@ -1,5 +1,6 @@
 package com.controller.login;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import org.json.simple.JSONObject;
 
 import com.dao.UserDAOImpl;
+import com.logic.UserHoldingExtraFunctions;
 import com.pojo.Holding;
 
 @Path("/login")
@@ -39,6 +41,15 @@ public class UserAuthLogin {
 			userHoldings = userDao.getAllHoldings(emailId);
 		}
 		
+		UserHoldingExtraFunctions extraFun = new UserHoldingExtraFunctions();
+		List<Double> gainList = new ArrayList<>();
+		List<Double> gainPercentageList = new ArrayList<>();
+		for (Holding holding:userHoldings) {
+			double spotPrice  = extraFun.getSpotPrice(holding);
+			gainList.add(((spotPrice - holding.getLtp())*holding.getNumLots()*holding.getLotSize())/holding.getLtp());
+			gainPercentageList.add(((spotPrice - holding.getLtp())*100)/holding.getLtp());
+		}
+		
 		JSONObject response = new JSONObject();
 		response.put("message", message);
 		response.put("url", url);
@@ -46,6 +57,8 @@ public class UserAuthLogin {
 		response.put("firstName", output.split(" ")[0]);
 		response.put("lastName", output.split(" ")[1]);
 		response.put("userHolding", userHoldings);
+		response.put("gainList", gainList);
+		response.put("gainPercentageList", gainPercentageList);
 		
 		return(response);
 	}
