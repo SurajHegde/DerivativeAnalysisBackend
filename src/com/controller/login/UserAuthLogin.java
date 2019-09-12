@@ -27,7 +27,7 @@ public class UserAuthLogin {
 	public JSONObject login(JSONObject incomingData) {
 		String message;
 		String url;
-		List <Holding> userHoldings = new ArrayList<>();
+		List <Holding> userHoldings = new ArrayList<Holding>();
 		String emailId = (String) incomingData.get("emailId");
 		String password = (String) incomingData.get("password");
 		boolean error = false;

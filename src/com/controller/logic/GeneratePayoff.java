@@ -39,12 +39,12 @@ public class GeneratePayoff {
 				holding.setAvgPrice(Double.parseDouble((String)jsonObject.get("price")));
 				holding.setStrikePrice(0);
 				String symbol = ((String)jsonObject.get("symbol"));
-				if(jsonObject.get("lot_size") == null) {
+				if(jsonObject.get("lotSize") == null) {
 					int lotSize = dl.getLotSize(symbol);
 					holding.setLotSize(lotSize);
 				}
 				else {
-					holding.setLotSize(Integer.parseInt((String)jsonObject.get("lotsize")));
+					holding.setLotSize(Integer.parseInt((String)jsonObject.get("lotSize")));
 				}
 					
 			}
@@ -55,12 +55,12 @@ public class GeneratePayoff {
 				holding.setNumLots(Integer.parseInt((String)jsonObject.get("quantity")));
 				holding.setStrikePrice(Double.parseDouble((String)jsonObject.get("strikePrice")));
 				String symbol = ((String)jsonObject.get("symbol"));
-				if(jsonObject.get("lot_size") == null) {
+				if(jsonObject.get("lotSize") == null) {
 					int lotSize = dl.getLotSize(symbol);
 					holding.setLotSize(lotSize);
 				} else {
 					
-					holding.setLotSize(Integer.parseInt((String)jsonObject.get("lotsize")));
+					holding.setLotSize(Integer.parseInt((String)jsonObject.get("lotSize")));
 				}
 			}
 			
