@@ -1,5 +1,7 @@
 package com.logic;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,17 +13,20 @@ import com.pojo.Holding;
 public class DerivativeLogic {
 
 	public double calcMaxProfit(List<Pair> coordinateList) {
-		return Collections.max(coordinateList,Comparator.comparing(coord -> coord.getY())).getY();
+		Double maxProfit = new Double(Collections.max(coordinateList,Comparator.comparing(coord -> coord.getY())).getY());
+		return BigDecimal.valueOf(maxProfit).setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
 	public double calcMaxLoss(List<Pair> coordinateList) {
-		return Collections.min(coordinateList,Comparator.comparing(coord -> coord.getY())).getY();
+		Double maxLoss = new Double(Collections.min(coordinateList,Comparator.comparing(coord -> coord.getY())).getY());
+		return BigDecimal.valueOf(maxLoss).setScale(2, RoundingMode.HALF_UP).doubleValue();
 	}
 	public List<Double> calcBreakeven(List<Pair> coordinateList) {
 		List<Double> breakEvenPoints = new ArrayList<>();
 		for (int i=0;i<(coordinateList.size()-1);i++) {
 			if (coordinateList.get(i).getY()*coordinateList.get(i+1).getY() < 0) {	
 				double distance = (coordinateList.get(i+1).getX()-coordinateList.get(i).getX())*Math.abs(coordinateList.get(i).getY()/(coordinateList.get(i+1).getY()-coordinateList.get(i).getY()));
-				breakEvenPoints.add((coordinateList.get(i).getX()+distance));
+				Double breakeven = new Double((coordinateList.get(i).getX()+distance));
+				breakEvenPoints.add(BigDecimal.valueOf(breakeven).setScale(2, RoundingMode.HALF_UP).doubleValue());
 			}
 		}
 		return breakEvenPoints;
