@@ -281,7 +281,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 				ps.setDouble(4, strikePrice);
 			ResultSet set = ps.executeQuery();
 			while (set.next()) {
-				spotPrice = set.getDouble("ltp");
+				spotPrice = set.getDouble("lcp");
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
