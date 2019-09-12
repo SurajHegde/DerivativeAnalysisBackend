@@ -123,7 +123,7 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return "";
 	}
-
+	
 
 	@Override
 	public List<Holding> getAllHoldings(String emailId) {

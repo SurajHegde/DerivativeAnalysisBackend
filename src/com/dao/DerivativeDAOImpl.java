@@ -361,6 +361,5 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		
 		return instrumentValue;
 	}
-
 }
 

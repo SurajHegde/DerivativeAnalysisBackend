@@ -49,7 +49,7 @@ public class UserAuthCreateAccount {
 		response.put("url", url);
 		response.put("uniqueIdentifier", emailId);
 		response.put("firstName", firstName);
-		response.put("lastNname", lastName);
+		response.put("lastName", lastName);
 		response.put("userHolding", userHoldings);
 		response.put("error",validateCreate);
 		return(response);

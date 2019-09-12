@@ -30,7 +30,7 @@ public class UserAuthLogin {
 		List <Holding> userHoldings = new ArrayList<>();
 		String emailId = (String) incomingData.get("emailId");
 		String password = (String) incomingData.get("password");
-		
+		boolean error = false;
 		UserDAOImpl userDao = new UserDAOImpl();
 		String output = userDao.login(emailId, password);
 		
@@ -41,6 +41,7 @@ public class UserAuthLogin {
 			message = "Login Successful";
 			url = "/app/dashboard";
 			userHoldings = userDao.getAllHoldings(emailId);
+			error = true;
 		}
 		
 		UserHoldingExtraFunctions extraFun = new UserHoldingExtraFunctions();
@@ -63,7 +64,7 @@ public class UserAuthLogin {
 		response.put("userHolding", userHoldings);
 		response.put("gainList", gainList);
 		response.put("gainPercentageList", gainPercentageList);
-		
+		response.put("error", error);
 		return(response);
 	}
 }
