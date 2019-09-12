@@ -54,37 +54,39 @@ public class UserDAOImpl implements UserDAO {
 
 
 	@Override
-	public String createAccount(String emailId,String firstName,String lastName,String password,String confirmPassword) {
+	public List<String> createAccount(String emailId,String firstName,String lastName,String password,String confirmPassword) {
 		// TODO Auto-generated method stub
-		String error = "";
+		List<String> error = new ArrayList<String>();
+		List<String> success = new ArrayList<String>();
 		try {
 			if (emailExists(emailId)) {
-				error += "Email ID already exists\n";
+				error.add("Email ID already exists");
 			}
 
 			if(emailId == "") {
-				error += "Email ID cannot be empty\n";
+				error.add("Email ID cannot be empty");
 			}
 			if (firstName == "") {
-				error += "First name cannot be empty\n";
+				error.add("First name cannot be empty");
 			}
 			if (lastName == "") {
-				error += "Last name cannot be empty\n";
+				error.add("Last name cannot be empty");
 			}
 			if (password.length() < 8) {
-				error += "Password length cannot be lesser than 8\n";
+				error.add("Password length cannot be lesser than 8");
 			}
 			if (!password.equals(confirmPassword)) {
-				error += "Passwords do not match\n";
+				error.add("Passwords do not match");
 			}
-			if(!error.equals("")) {
+			if(!error.isEmpty()) {
 				return error;
 			}
 			if (addUser(emailId,firstName,lastName,password)) {
-				return "User was registered successfully\n";
+				success.add("User was registered successfully");
+				return success;
 			}
 			else {
-				return " Registration was not completed";
+				error.add("Registration was not completed!");
 			}
 		}catch (Exception e) {
 			e.printStackTrace();

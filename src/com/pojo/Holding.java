@@ -8,8 +8,8 @@ public class Holding extends Derivative {
 	
 	public Holding() {
 		super();
-		this.avgPrice = 0;
-		this.spotPrice = 0;
+		this.avgPrice = 1;
+		this.spotPrice = 1;
 	}
 	
 	public Holding(String type, String position, double strikePrice, String symbol,

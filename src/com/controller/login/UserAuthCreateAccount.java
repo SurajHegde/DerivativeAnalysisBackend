@@ -15,13 +15,13 @@ import com.pojo.Holding;
 
 @Path("/create")
 public class UserAuthCreateAccount {
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 
 	public JSONObject createAccount(JSONObject incomingData) {
-		String message;
+		List<String> message = null;
 		String url;
 		List <Holding> userHoldings = null;
 		String emailId = (String) incomingData.get("emailId");
@@ -29,18 +29,21 @@ public class UserAuthCreateAccount {
 		String lastName = (String) incomingData.get("lastName");
 		String password = (String) incomingData.get("password");
 		String confirmPassword = (String) incomingData.get("confirmPassword");
-		
+
 		UserDAOImpl userDao = new UserDAOImpl();
-		String output = userDao.createAccount(emailId, firstName, lastName, password, confirmPassword);
-		
-		if(!output.equals("User was registered successfully\n")) {
-			message = output;
-			url = "/login";
-		} else {
-			message = "User was registered successfully";
-			url = "/app/dashboard";
+		List <String> output = userDao.createAccount(emailId, firstName, lastName, password, confirmPassword);
+		boolean validateCreate = false;
+		for(String errorMessages : output) {
+			if(errorMessages.equals("User was registered successfully"))
+				validateCreate = true;
 		}
-		
+		message = output;
+		if(validateCreate) {
+			url = "/app/dashboard";
+		} else {
+			url = "/login";
+		}
+
 		JSONObject response = new JSONObject();
 		response.put("message", message);
 		response.put("url", url);
@@ -48,8 +51,8 @@ public class UserAuthCreateAccount {
 		response.put("firstName", firstName);
 		response.put("lastNname", lastName);
 		response.put("userHolding", userHoldings);
-		
+		response.put("error",validateCreate);
 		return(response);
 	}
-	
+
 }

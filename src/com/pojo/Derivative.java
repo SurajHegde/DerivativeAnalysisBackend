@@ -26,7 +26,7 @@ public class Derivative {
 		this.lotSize = 0;
 		this.numLots = 0;
 		this.premium = 0;
-		this.ltp = 0;
+		this.ltp = 1;
 	}
 	public Derivative(String type, String position, double strikePrice, String symbol,
 			String expiryDate, double underlyingValue,double volatility,int lotSize,int numLots,double premium) {
