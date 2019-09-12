@@ -16,4 +16,5 @@ public interface DerivativeDAO {
 	public List<Holding> getSpecificDerivative(String symbol);
 	public int getLotSize(String symbol);
 	public double getLCP(String symbol,String type,String expiryDate,double strikePrice);
+	//public List<Pair> getValueUser(String emailId,String symbol);
 }

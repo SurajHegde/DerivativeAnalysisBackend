@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import com.connection.MyConnection;
@@ -77,7 +78,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		// TODO Auto-generated method stub
 		try(Connection conn = MyConnection.openConnection()) {
 			Holding holdings = checkUserHolding(emailId, symbol, type, expiryDate, strikePrice);
-			if(holdings.getSymbol() !="") {
+			if(holdings.getSymbol() != "") {
 				boolean rows = updateUserHolding(emailId, type, symbol, position, expiryDate, strikePrice, numLots, spotPrice,premium);
 				return rows;
 			} else {
@@ -231,7 +232,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		List<Holding> specificDerivative = new ArrayList<Holding>();
 		String GET_DERIVATIVE = "select * from derivatives where symbol = ?";
 		System.out.println(symbol);
-
+		
 		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_DERIVATIVE)){
 			ps.setString(1, symbol);
 			ResultSet set = ps.executeQuery();
@@ -288,5 +289,78 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		}
 		return spotPrice;
 	}
+	public HashMap<String,Double> getValueUser(String emailId) {
+		String GET_DERIVATIVE = "select * from holdings where emailid = ?";
+		HashMap<String,Double> totalValue = new HashMap<String,Double>();
+		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_DERIVATIVE);){
+			ps.setString(1, emailId);
+			ResultSet set = ps.executeQuery();
+			while(set.next()) {
+				String symbol = set.getString("symbol");
+				String type = set.getString("type");
+				int numLots = set.getInt("numLots");
+				int lotSize = getLotSize(symbol);
+				if(totalValue.containsKey(symbol)) {
+					if(type.equals("FUT")) {
+						double premium = set.getDouble("premium");
+						totalValue.put(symbol,totalValue.get(symbol) + premium*numLots*lotSize);
+					} else {
+						double avgPrice = set.getDouble("avg_price");
+						totalValue.put(symbol,totalValue.get(symbol) + avgPrice*numLots*lotSize);
+					}
+				} else {
+					if(type.equals("FUT")){
+						double avgPrice = set.getDouble("avg_price");
+						totalValue.put(symbol,avgPrice*numLots*lotSize);
+					} else {
+						double premium = set.getDouble("premium");
+						totalValue.put(symbol,premium*numLots*lotSize);
+					}
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return totalValue;
+	}
+	public HashMap<String,Double> getValueInstrument(String emailId,String symbol){
+		HashMap<String,Double> instrumentValue = new HashMap<String,Double>();
+		String GET_INSTRUMENTS = "select * from holdings where emailid = ? and symbol = ?";
+		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_INSTRUMENTS)){
+			ps.setString(1, emailId);
+			ps.setString(2, symbol);
+			int lotSize = getLotSize(symbol);
+			ResultSet set = ps.executeQuery();
+			while(set.next()) {
+				String type = set.getString("type");
+				String expiryDate = set.getString("expiryDate");
+				double strikePrice = set.getDouble("strike_price");
+				int numLots = set.getInt("lots");
+				if(type.equals("FUT")) {
+					String instrument = symbol + " " + type + " " + expiryDate;
+					double avgPrice = set.getDouble("avg_price");
+					if(instrumentValue.containsKey(instrument)) {
+						instrumentValue.put(instrument,instrumentValue.get(instrument) + avgPrice*numLots*lotSize);
+					}else {
+						instrumentValue.put(instrument,avgPrice*numLots*lotSize);
+					}
+				} else {
+					String instrument = symbol + " " + expiryDate + " " + String.valueOf(strikePrice) + " " + type;
+					double premium = set.getDouble("premium");
+					if(instrumentValue.containsKey(instrument)) {
+						instrumentValue.put(instrument, instrumentValue.get(instrument) + premium*lotSize*numLots);
+					} else {
+						instrumentValue.put(instrument,premium*numLots*lotSize);
+					}
+					
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return instrumentValue;
+	}
+
 }
 
