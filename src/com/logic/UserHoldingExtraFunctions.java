@@ -26,4 +26,21 @@ public class UserHoldingExtraFunctions {
 		}
 		return spotPrice;
 	}
+	public double getSpotPrice(String symbol,String type,String expiryDate,double strikePrice) {
+		double spotPrice = 0.9;
+		String FIND_SPOT_PRICE = "SELECT LTP FROM DERIVATIVES WHERE SYMBOL = ? AND TYPE = ? AND EXPIRY_DATE = ? AND STRIKE_PRICE = ?";
+		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(FIND_SPOT_PRICE)){
+			ps.setString(1, symbol);
+			ps.setString(2, type);
+			ps.setString(3, expiryDate);
+			ps.setDouble(4, strikePrice);
+			ResultSet set = ps.executeQuery();
+			while (set.next()) {
+				spotPrice = set.getDouble("LTP");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return spotPrice;
+	}
 }

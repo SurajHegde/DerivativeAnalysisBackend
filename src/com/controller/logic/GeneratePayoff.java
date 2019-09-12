@@ -39,7 +39,7 @@ public class GeneratePayoff {
 				holding.setAvgPrice(Double.parseDouble((String)jsonObject.get("price")));
 				holding.setStrikePrice(0);
 				String symbol = ((String)jsonObject.get("symbol"));
-				if(jsonObject.get("lotSize") == null) {
+				if(jsonObject.get("lotSize").equals("")) {
 					int lotSize = dl.getLotSize(symbol);
 					holding.setLotSize(lotSize);
 				}

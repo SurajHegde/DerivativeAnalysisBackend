@@ -12,6 +12,7 @@ import com.connection.MyConnection;
 import com.logic.CalculatePLLogic;
 
 import com.logic.Pair;
+import com.logic.UserHoldingExtraFunctions;
 import com.pojo.Holding;
 
 public class DerivativeDAOImpl implements DerivativeDAO {
@@ -289,32 +290,36 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		}
 		return spotPrice;
 	}
+	
 	public HashMap<String,Double> getValueUser(String emailId) {
 		String GET_DERIVATIVE = "select * from holdings where emailid = ?";
 		HashMap<String,Double> totalValue = new HashMap<String,Double>();
+		UserHoldingExtraFunctions extra = new UserHoldingExtraFunctions();
 		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_DERIVATIVE);){
 			ps.setString(1, emailId);
 			ResultSet set = ps.executeQuery();
 			while(set.next()) {
 				String symbol = set.getString("symbol");
 				String type = set.getString("type");
+				String expiryDate = set.getString("expiry_date");
+				double strikePrice = set.getDouble("spot_price");
 				int numLots = set.getInt("numLots");
+				double lcp = set.getDouble("lcp");
+				double ltp = extra.getSpotPrice(symbol, type, expiryDate, strikePrice);
 				int lotSize = getLotSize(symbol);
 				if(totalValue.containsKey(symbol)) {
 					if(type.equals("FUT")) {
-						double premium = set.getDouble("premium");
-						totalValue.put(symbol,totalValue.get(symbol) + premium*numLots*lotSize);
+						totalValue.put(symbol,totalValue.get(symbol) + (ltp-lcp)*numLots*lotSize);
 					} else {
-						double avgPrice = set.getDouble("avg_price");
-						totalValue.put(symbol,totalValue.get(symbol) + avgPrice*numLots*lotSize);
+						double premium = set.getDouble("premium");
+						totalValue.put(symbol,totalValue.get(symbol) + (premium-lcp)*numLots*lotSize);
 					}
 				} else {
 					if(type.equals("FUT")){
-						double avgPrice = set.getDouble("avg_price");
-						totalValue.put(symbol,avgPrice*numLots*lotSize);
+						totalValue.put(symbol,(ltp-lcp)*numLots*lotSize);
 					} else {
 						double premium = set.getDouble("premium");
-						totalValue.put(symbol,premium*numLots*lotSize);
+						totalValue.put(symbol,(premium-lcp)*numLots*lotSize);
 					}
 				}
 			}
@@ -326,6 +331,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 	public HashMap<String,Double> getValueInstrument(String emailId,String symbol){
 		HashMap<String,Double> instrumentValue = new HashMap<String,Double>();
 		String GET_INSTRUMENTS = "select * from holdings where emailid = ? and symbol = ?";
+		UserHoldingExtraFunctions extra = new UserHoldingExtraFunctions();
 		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_INSTRUMENTS)){
 			ps.setString(1, emailId);
 			ps.setString(2, symbol);
@@ -335,22 +341,23 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 				String type = set.getString("type");
 				String expiryDate = set.getString("expiryDate");
 				double strikePrice = set.getDouble("strike_price");
+				double lcp = set.getDouble("lcp");
+				double ltp = extra.getSpotPrice(symbol, type, expiryDate, strikePrice);
 				int numLots = set.getInt("lots");
 				if(type.equals("FUT")) {
 					String instrument = symbol + " " + type + " " + expiryDate;
-					double avgPrice = set.getDouble("avg_price");
 					if(instrumentValue.containsKey(instrument)) {
-						instrumentValue.put(instrument,instrumentValue.get(instrument) + avgPrice*numLots*lotSize);
+						instrumentValue.put(instrument,instrumentValue.get(instrument) + (ltp-lcp)*numLots*lotSize);
 					}else {
-						instrumentValue.put(instrument,avgPrice*numLots*lotSize);
+						instrumentValue.put(instrument,(ltp-lcp)*numLots*lotSize);
 					}
 				} else {
 					String instrument = symbol + " " + expiryDate + " " + String.valueOf(strikePrice) + " " + type;
 					double premium = set.getDouble("premium");
 					if(instrumentValue.containsKey(instrument)) {
-						instrumentValue.put(instrument, instrumentValue.get(instrument) + premium*lotSize*numLots);
+						instrumentValue.put(instrument, instrumentValue.get(instrument) + (premium-lcp)*lotSize*numLots);
 					} else {
-						instrumentValue.put(instrument,premium*numLots*lotSize);
+						instrumentValue.put(instrument,(premium-lcp)*numLots*lotSize);
 					}
 					
 				}
