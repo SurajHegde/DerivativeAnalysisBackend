@@ -1,6 +1,7 @@
 package com.controller.logic;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -14,7 +15,7 @@ import org.json.simple.JSONObject;
 import com.dao.DerivativeDAOImpl;
 import com.pojo.Holding;
 
-@Path ("/derivativelist")
+@Path ("/derivativeList")
 public class GetDerivativeFromSymbol {
 	
 	@POST
@@ -22,6 +23,7 @@ public class GetDerivativeFromSymbol {
 	@Consumes(MediaType.APPLICATION_JSON)
 	
 	public JSONObject getDerivative(JSONObject incomingData) {
+				
 		DerivativeDAOImpl dl = new DerivativeDAOImpl();
 		String symbol = (String) incomingData.get("value");
 		List<Holding> allHoldingsWithSymbol = dl.getSpecificDerivative(symbol);
