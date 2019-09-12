@@ -94,7 +94,7 @@ public class GeneratePayoff {
 				coordinateList.get(coordinateList.size()-1).setY(netPL);
 			}
 			else {
-				coordinateList.get(1000);
+				coordinateList.get(coordinateList.size()-1).setX(1000);
 				double netPL = 0.0;
 				for (Holding holding:holdingList) {
 					netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),coordinateList.get(coordinateList.size()-1).getX(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),holding.getAvgPrice(),coordinateList.get(coordinateList.size()-1).getX())).getPayoff(); 

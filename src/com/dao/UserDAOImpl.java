@@ -157,6 +157,7 @@ public class UserDAOImpl implements UserDAO {
 		UserHoldingExtraFunctions extraFun = new UserHoldingExtraFunctions();
 		for(Holding holding : userHoldings) {
 			double spotPrice  = extraFun.getSpotPrice(holding);
+			holding.setSpotPrice(spotPrice);
 			gainList.add(((spotPrice - holding.getLtp())*holding.getNumLots()*holding.getLotSize())/holding.getLtp());
 		}
 		return gainList;
@@ -166,6 +167,7 @@ public class UserDAOImpl implements UserDAO {
 		UserHoldingExtraFunctions extraFun = new UserHoldingExtraFunctions();
 		for(Holding holding : userHoldings) {
 			double spotPrice = extraFun.getSpotPrice(holding);
+			holding.setSpotPrice(spotPrice);
 			gainPercentageList.add(((spotPrice - holding.getLtp())*holding.getNumLots()*holding.getLotSize())/holding.getLtp());
 		}
 		return gainPercentageList;
