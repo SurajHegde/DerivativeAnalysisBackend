@@ -800,7 +800,7 @@ public class StrategyLogic {
 		StrategyDAOImpl s = new StrategyDAOImpl();
 		DerivativeLogic d = new DerivativeLogic();
 		list = s.getHolding(symbol, type, expiry_date);
-		
+		System.out.println(list);
 		for(int i=0; i<list.size() ; i++)
 		{
 			for(int j=0;j<list.size();j++)

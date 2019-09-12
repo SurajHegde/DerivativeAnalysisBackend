@@ -18,7 +18,7 @@ public class Strategy {
 	
 	public String toString()
 	{
-		return strategyName+views;
+		return strategyName+" "+views;
 	}
 	
 	
