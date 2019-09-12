@@ -15,7 +15,7 @@ import org.json.simple.JSONObject;
 import com.dao.DerivativeDAOImpl;
 import com.pojo.Holding;
 
-@Path ("/derivativeList")
+@Path ("/derivativelist")
 public class GetDerivativeFromSymbol {
 	
 	@POST
