@@ -56,7 +56,7 @@ public class GeneratePayoff {
 				holding.setNumLots(Integer.parseInt((String)jsonObject.get("quantity")));
 				holding.setStrikePrice(Double.parseDouble((String)jsonObject.get("strikePrice")));
 				String symbol = ((String)jsonObject.get("symbol"));
-				if(jsonObject.get("lotSize") == null) {
+				if(jsonObject.get("lotSize").equals("")) {
 					int lotSize = dl.getLotSize(symbol);
 					holding.setLotSize(lotSize);
 				} else {
@@ -84,20 +84,47 @@ public class GeneratePayoff {
 		response.put("maxloss", maxLoss);
 		
 		CalculatePLLogic payoffCalc = new CalculatePLLogic();
-		
-		if ((coordinateList.get(coordinateList.size()-2).getX()<breakEvenPoints.get(breakEvenPoints.size()-1))) {
-			coordinateList.get(coordinateList.size()-1).setX(1.2*breakEvenPoints.get(breakEvenPoints.size()));
-			double netPL = 0.0;
-			for (Holding holding:holdingList) {
-				netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),coordinateList.get(coordinateList.size()-1).getX(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),coordinateList.get(coordinateList.size()-1).getX(),holding.getSpotPrice())).getPayoff(); 
+		if (coordinateList.size()==2){
+			if (!breakEvenPoints.isEmpty()) {
+				coordinateList.get(coordinateList.size()-1).setX(1.2*breakEvenPoints.get(breakEvenPoints.size()-1));
+				double netPL = 0.0;
+				for (Holding holding:holdingList) {
+					netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),coordinateList.get(coordinateList.size()-1).getX(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),holding.getAvgPrice(),coordinateList.get(coordinateList.size()-1).getX())).getPayoff(); 
+				}
+				coordinateList.get(coordinateList.size()-1).setY(netPL);
 			}
-			coordinateList.get(coordinateList.size()-1).setY(netPL);
+			else {
+				coordinateList.get(1000);
+				double netPL = 0.0;
+				for (Holding holding:holdingList) {
+					netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),coordinateList.get(coordinateList.size()-1).getX(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),holding.getAvgPrice(),coordinateList.get(coordinateList.size()-1).getX())).getPayoff(); 
+				}
+				coordinateList.get(coordinateList.size()-1).setY(netPL);
+			}
+		}
+		else if (!breakEvenPoints.isEmpty()) {
+			if ((coordinateList.get(coordinateList.size()-2).getX()<breakEvenPoints.get(breakEvenPoints.size()-1))) {
+				coordinateList.get(coordinateList.size()-1).setX(1.2*breakEvenPoints.get(breakEvenPoints.size()-1));
+				double netPL = 0.0;
+				for (Holding holding:holdingList) {
+					netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),coordinateList.get(coordinateList.size()-1).getX(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),holding.getSpotPrice(),coordinateList.get(coordinateList.size()-1).getX())).getPayoff(); 
+				}
+				coordinateList.get(coordinateList.size()-1).setY(netPL);
+			}
+			else {
+				coordinateList.get(coordinateList.size()-1).setX(1.2*(coordinateList.get(coordinateList.size()-2).getX()));
+				double netPL = 0.0;
+				for (Holding holding:holdingList) {
+					netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),coordinateList.get(coordinateList.size()-1).getX(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),holding.getAvgPrice(),coordinateList.get(coordinateList.size()-1).getX())).getPayoff(); 
+				}
+				coordinateList.get(coordinateList.size()-1).setY(netPL);
+			}
 		}
 		else {
-			coordinateList.get(coordinateList.size()-1).setX(coordinateList.get(coordinateList.size()-2).getX());
+			coordinateList.get(coordinateList.size()-1).setX(1.2*(coordinateList.get(coordinateList.size()-2).getX()));
 			double netPL = 0.0;
 			for (Holding holding:holdingList) {
-				netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),coordinateList.get(coordinateList.size()-1).getX(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),coordinateList.get(coordinateList.size()-1).getX(),holding.getSpotPrice())).getPayoff(); 
+				netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),coordinateList.get(coordinateList.size()-1).getX(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),holding.getAvgPrice(),coordinateList.get(coordinateList.size()-1).getX())).getPayoff(); 
 			}
 			coordinateList.get(coordinateList.size()-1).setY(netPL);
 		}

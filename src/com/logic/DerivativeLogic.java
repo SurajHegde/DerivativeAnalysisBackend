@@ -44,20 +44,23 @@ public class DerivativeLogic {
 		double netPL = 0.0;
 		
 		for (Holding holding:holdingList) {
-			netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),0,holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),0,holding.getSpotPrice())).getPayoff(); 
+			netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),0,holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),holding.getAvgPrice(),0)).getPayoff(); 
 		}
 		
 		coordinateList.add(new Pair(0.0, netPL));
 		
 		for (int i=0;i<holdingList.size();i++) {
-			if (i<holdingList.size()-1) {	
+			if (holdingList.get(i).getType().equals("FUT")) {
+				continue;
+			}
+			if ((i<holdingList.size()-1)) {	
 				if (holdingList.get(i).getStrikePrice() == holdingList.get(i+1).getStrikePrice()) {
 					continue;
 				}
 			}
 			netPL = 0.0;
 			for (Holding holding:holdingList) {
-				netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),holdingList.get(i).getStrikePrice(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),holdingList.get(i).getStrikePrice(),holding.getSpotPrice())).getPayoff(); 
+				netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),holdingList.get(i).getStrikePrice(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),holding.getAvgPrice(),holdingList.get(i).getStrikePrice())).getPayoff(); 
 			}
 			coordinateList.add(new Pair(holdingList.get(i).getStrikePrice(),netPL));	
 
@@ -66,7 +69,7 @@ public class DerivativeLogic {
 		netPL = 0.0;
 		
 		for (Holding holding:holdingList) {
-			netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),999999d,holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),999999d,holding.getSpotPrice())).getPayoff(); 
+			netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),999999d,holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),holding.getAvgPrice(),999999d)).getPayoff(); 
 		}
 		
 		coordinateList.add(new Pair(999999d, netPL));

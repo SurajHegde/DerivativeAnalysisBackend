@@ -52,14 +52,14 @@ public class CalculatePLLogic {
 		case "FUT":
 			if(h.getPosition().equals("LONG"))
 			{
-				payoff = (h.getLtp() - h.getAvgPrice())*h.getNumLots()*h.getLotSize(); //h.getAvgPrice() will be stored in holding table
+				payoff = (h.getSpotPrice() - h.getAvgPrice())*h.getNumLots()*h.getLotSize(); //h.getAvgPrice() will be stored in holding table
 				breakeven = h.getAvgPrice();
 				maxProfit = Double.POSITIVE_INFINITY;
 				maxLoss = h.getAvgPrice()*h.getNumLots()*h.getLotSize();
 			}
 			else if(h.getPosition().equals("SHORT"))
 			{
-				payoff = - ((h.getLtp() - h.getAvgPrice()))*h.getNumLots()*h.getLotSize(); 
+				payoff = - ((h.getSpotPrice() - h.getAvgPrice()))*h.getNumLots()*h.getLotSize(); 
 				breakeven = h.getAvgPrice();
 				maxProfit = h.getAvgPrice()*h.getNumLots()*h.getLotSize();
 				maxLoss = Double.NEGATIVE_INFINITY;
