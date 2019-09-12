@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.json.simple.JSONObject;
 
+import com.dao.DerivativeDAOImpl;
 import com.dao.UserDAOImpl;
 import com.logic.DerivativeLogic;
 import com.logic.Pair;
@@ -27,7 +28,7 @@ public class GeneratePayoff {
 		String message;
 		String url = "/app/analysis";
 		List<Holding> holdingList = new ArrayList<>();;
-		
+		DerivativeDAOImpl dl = new DerivativeDAOImpl();
 		for (JSONObject jsonObject:incomingData) {
 			Holding holding = new Holding();
 			
@@ -37,7 +38,15 @@ public class GeneratePayoff {
 				holding.setNumLots(Integer.parseInt((String)jsonObject.get("quantity")));
 				holding.setAvgPrice(Double.parseDouble((String)jsonObject.get("price")));
 				holding.setStrikePrice(0);
-				holding.setLotSize(Integer.parseInt((String)jsonObject.get("lotsize")));
+				String symbol = ((String)jsonObject.get("symbol"));
+				if(jsonObject.get("lot_size") == null) {
+					int lotSize = dl.getLotSize(symbol);
+					holding.setLotSize(lotSize);
+				}
+				else {
+					holding.setLotSize(Integer.parseInt((String)jsonObject.get("lotsize")));
+				}
+					
 			}
 			else {
 				holding.setType((String)jsonObject.get("type"));
@@ -45,7 +54,14 @@ public class GeneratePayoff {
 				holding.setPosition((String)jsonObject.get("position"));
 				holding.setNumLots(Integer.parseInt((String)jsonObject.get("quantity")));
 				holding.setStrikePrice(Double.parseDouble((String)jsonObject.get("strikePrice")));
-				holding.setLotSize(Integer.parseInt((String)jsonObject.get("lotsize")));
+				String symbol = ((String)jsonObject.get("symbol"));
+				if(jsonObject.get("lot_size") == null) {
+					int lotSize = dl.getLotSize(symbol);
+					holding.setLotSize(lotSize);
+				} else {
+					
+					holding.setLotSize(Integer.parseInt((String)jsonObject.get("lotsize")));
+				}
 			}
 			
 			holdingList.add(holding);	

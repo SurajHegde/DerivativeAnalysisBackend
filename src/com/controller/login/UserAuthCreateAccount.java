@@ -53,6 +53,6 @@ public class UserAuthCreateAccount {
 		response.put("userHolding", userHoldings);
 		response.put("error",validateCreate);
 		return(response);
-	}
+	} 
 
 }

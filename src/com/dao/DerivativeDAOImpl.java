@@ -251,12 +251,12 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		} 
 		return specificDerivative;
 	}
-	public double getLotSize(String symbol) {
+	public int getLotSize(String symbol) {
 		String GET_LOT_SIZE = "select lot_size from derivatives where symbol = ?";
 		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_LOT_SIZE);){
 			ps.setString(1, symbol);
 			ResultSet set = ps.executeQuery();
-			double lotSize = set.getDouble("lot_size");
+			int lotSize = set.getInt("lot_size");
 			return lotSize;
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -271,7 +271,10 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 			ps.setString(1, symbol);
 			ps.setString(2, type);
 			ps.setString(3, expiryDate);
-			ps.setDouble(4, strikePrice);
+			if(type.equals("FUT"))
+				ps.setDouble(4, 0);
+			else
+				ps.setDouble(4, strikePrice);
 			ResultSet set = ps.executeQuery();
 			while (set.next()) {
 				spotPrice = set.getDouble("ltp");
