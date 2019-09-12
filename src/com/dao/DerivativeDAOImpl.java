@@ -91,7 +91,8 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 				ps.setDouble(6, strikePrice);
 				ps.setDouble(7, lotSize);
 				ps.setInt(8, numLots);
-				ps.setDouble(10, lcp);
+				double derivativeLcp = getLCP(symbol, type, expiryDate, strikePrice);
+				ps.setDouble(10, derivativeLcp);
 				if(type.equals("FUT")) {
 					ps.setDouble(11, spotPrice);
 					ps.setDouble(9, 0);
@@ -115,10 +116,10 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		int rows = 0;
 		String DELETE_HOLDING = "delete from holdings where emailid = ? and symbol = ? and type = ? and expiry_date = ? and strike_price = ?";
 		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(DELETE_HOLDING);){
-			ps.setString(1,emailId);
-			ps.setString(2,symbol);
-			ps.setString(3,type);
-			ps.setString(4,expiryDate);
+			ps.setString(1, emailId);
+			ps.setString(2, symbol);
+			ps.setString(3, type);
+			ps.setString(4, expiryDate);
 			ps.setDouble(5, strikePrice);
 			rows = ps.executeUpdate();
 			return rows;
