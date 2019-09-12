@@ -49,6 +49,7 @@ public class UserAuthLogin {
 		List<Double> gainPercentageList = new ArrayList<>();
 		for (Holding holding:userHoldings) {
 			double spotPrice  = extraFun.getSpotPrice(holding);
+			holding.setSpotPrice(spotPrice);
 			Double gain = new Double(((spotPrice - holding.getLtp())*holding.getNumLots()*holding.getLotSize())/holding.getLtp());
 			Double gainPercentage = new Double(((spotPrice - holding.getLtp())*100)/holding.getLtp());
 			gainList.add(BigDecimal.valueOf(gain).setScale(2, RoundingMode.HALF_UP).doubleValue());

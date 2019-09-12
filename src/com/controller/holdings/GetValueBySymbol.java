@@ -20,7 +20,7 @@ public class GetValueBySymbol {
 	public JSONObject getValueByHolding(JSONObject incomingData) {
 		DerivativeDAOImpl dl = new DerivativeDAOImpl();
 		JSONObject response = new JSONObject();
-		String emailId = (String)incomingData.get("emailId");
+		String emailId = (String)incomingData.get("userEmail");
 		String symbol = (String)incomingData.get("symbol");
 		HashMap<String,Double> instrumentValue = new HashMap<String,Double>();
 		instrumentValue = dl.getValueInstrument(emailId, symbol);

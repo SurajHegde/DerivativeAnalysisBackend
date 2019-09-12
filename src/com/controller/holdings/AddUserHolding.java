@@ -47,6 +47,7 @@ public class AddUserHolding {
 			response.put("gainPercentage", gainPercentageList);
 			return response;
 		}
+		
 		response.put("message", message);
 		//public boolean addUserHolding(String emailId,String type, String position, double strikePrice, String symbol,String expiryDate,double lotSize, double lcp,double premium,int numLots,double spotPrice) 
 		return response;

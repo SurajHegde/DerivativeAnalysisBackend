@@ -302,8 +302,8 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 				String symbol = set.getString("symbol");
 				String type = set.getString("type");
 				String expiryDate = set.getString("expiry_date");
-				double strikePrice = set.getDouble("spot_price");
-				int numLots = set.getInt("numLots");
+				double strikePrice = set.getDouble("strike_price");
+				int numLots = set.getInt("lots");
 				double lcp = set.getDouble("lcp");
 				double ltp = extra.getSpotPrice(symbol, type, expiryDate, strikePrice);
 				int lotSize = getLotSize(symbol);

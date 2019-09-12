@@ -16,9 +16,9 @@ public class GetHoldingsValueByUser {
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public JSONObject valueByUser(JSONObject incomingData) {
-		String emailId = (String) incomingData.get("emailId");
+	//@Consumes(MediaType.APPLICATION_JSON)
+	
+	public JSONObject valueByUser(String emailId) {
 		HashMap<String,Double> userValue = new HashMap<String,Double>();
 		DerivativeDAOImpl dl = new DerivativeDAOImpl();
 		userValue = dl.getValueUser(emailId);
