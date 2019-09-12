@@ -41,7 +41,7 @@ public class StrategyDAOImpl {
 	public List<Holding> getHolding(String symbol, String type, String expiry_date)
 	{
 		List<Holding> holdings = new ArrayList();
-		
+		System.out.println(symbol+type+expiry_date);
 		String query = "select * from derivatives where symbol=? and type=? and expiry_date=?";
 		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(query);){
 			ps.setString(1, symbol);
