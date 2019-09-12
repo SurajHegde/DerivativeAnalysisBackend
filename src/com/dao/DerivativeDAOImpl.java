@@ -91,8 +91,8 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 				ps.setDouble(6, strikePrice);
 				ps.setDouble(7, lotSize);
 				ps.setInt(8, numLots);
-				double derivativeLcp = getLCP(symbol, type, expiryDate, strikePrice);
-				ps.setDouble(10, derivativeLcp);
+				lcp = getLCP(symbol, type, expiryDate, strikePrice);
+				ps.setDouble(10, lcp);
 				if(type.equals("FUT")) {
 					ps.setDouble(11, spotPrice);
 					ps.setDouble(9, 0);
