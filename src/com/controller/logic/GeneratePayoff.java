@@ -13,6 +13,7 @@ import org.json.simple.JSONObject;
 
 import com.dao.DerivativeDAOImpl;
 import com.dao.UserDAOImpl;
+import com.logic.CalculatePLLogic;
 import com.logic.DerivativeLogic;
 import com.logic.Pair;
 import com.pojo.Holding;
@@ -72,8 +73,6 @@ public class GeneratePayoff {
 		DerivativeLogic dlogic = new DerivativeLogic();
 		List<Pair> coordinateList = dlogic.generatePayoff(holdingList);
 		
-		response.put("coordinatelist", coordinateList);
-		
 		List<Double> breakEvenPoints = dlogic.calcBreakeven(coordinateList);
 		
 		response.put("breakevenpoints", breakEvenPoints);
@@ -84,6 +83,26 @@ public class GeneratePayoff {
 		response.put("maxprofit", maxProfit);
 		response.put("maxloss", maxLoss);
 		
+		CalculatePLLogic payoffCalc = new CalculatePLLogic();
+		
+		if ((coordinateList.get(coordinateList.size()-2).getX()<breakEvenPoints.get(breakEvenPoints.size()-1))) {
+			coordinateList.get(coordinateList.size()-1).setX(1.2*breakEvenPoints.get(breakEvenPoints.size()));
+			double netPL = 0.0;
+			for (Holding holding:holdingList) {
+				netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),coordinateList.get(coordinateList.size()-1).getX(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),coordinateList.get(coordinateList.size()-1).getX(),holding.getSpotPrice())).getPayoff(); 
+			}
+			coordinateList.get(coordinateList.size()-1).setY(netPL);
+		}
+		else {
+			coordinateList.get(coordinateList.size()-1).setX(coordinateList.get(coordinateList.size()-2).getX());
+			double netPL = 0.0;
+			for (Holding holding:holdingList) {
+				netPL+= payoffCalc.calculatePL(new Holding(holding.getType(),holding.getPosition(),holding.getStrikePrice(),holding.getSymbol(),holding.getExpiryDate(),coordinateList.get(coordinateList.size()-1).getX(),holding.getVolatility(),holding.getLotSize(),holding.getNumLots(),holding.getPremium(),coordinateList.get(coordinateList.size()-1).getX(),holding.getSpotPrice())).getPayoff(); 
+			}
+			coordinateList.get(coordinateList.size()-1).setY(netPL);
+		}
+		
+		response.put("coordinatelist", coordinateList);
 		response.put("message","Analysis done");
 		response.put("url", url);
 		
