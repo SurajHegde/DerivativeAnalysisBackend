@@ -230,7 +230,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		List<Holding> specificDerivative = new ArrayList<Holding>();
 		String GET_DERIVATIVE = "select * from derivatives where symbol = ?";
 		System.out.println(symbol);
-		
+
 		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_DERIVATIVE)){
 			ps.setString(1, symbol);
 			ResultSet set = ps.executeQuery();
@@ -256,7 +256,10 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_LOT_SIZE);){
 			ps.setString(1, symbol);
 			ResultSet set = ps.executeQuery();
-			int lotSize = set.getInt("lot_size");
+			int lotSize = 0;
+			if(set.next()) { 
+				lotSize = set.getInt("lot_size");
+			}
 			return lotSize;
 		} catch(Exception e) {
 			e.printStackTrace();

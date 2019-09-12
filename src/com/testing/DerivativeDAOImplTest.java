@@ -57,6 +57,12 @@ class DerivativeDAOImplTest {
 		
 	}
 
+	@Test
+	void testGetLotSize() {
+		DerivativeDAOImpl daoImpl= new DerivativeDAOImpl();
+		double actual= daoImpl.getLotSize("HDFCBANK");
+		assertEquals(250, actual);
+	}
 
 
 }
