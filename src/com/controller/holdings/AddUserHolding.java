@@ -38,7 +38,7 @@ public class AddUserHolding {
 		UserDAOImpl userDao = new UserDAOImpl();
 		JSONObject response = new JSONObject();
 		if(rows) {
-			List<Holding> userHoldings = dl.getAllUserHoldings(emailId);
+			List<Holding> userHoldings = userDao.getAllHoldings(emailId);
 			List<Double> gain = userDao.getGain(userHoldings);
 			List<Double> gainPercentageList = userDao.getGainPercentage(userHoldings);
 			message = "Success";

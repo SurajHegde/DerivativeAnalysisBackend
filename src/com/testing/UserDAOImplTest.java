@@ -17,7 +17,7 @@ class UserDAOImplTest {
 	void testEmailEmpty() {
 		//fail("Not yet implemented");
 		UserDAOImpl daoImpl= new UserDAOImpl();
-		String actual= daoImpl.createAccount("", "Utkarsh", "Sharma", "161219971", "161219971");
+		List<String> actual= daoImpl.createAccount("", "Utkarsh", "Sharma", "161219971", "161219971");
 		assertEquals("Email ID cannot be empty\n", actual);
 		
 	}
@@ -25,7 +25,7 @@ class UserDAOImplTest {
 	void testFirstNameEmpty() {
 		//fail("Not yet implemented");
 		UserDAOImpl daoImpl= new UserDAOImpl();
-		String actual= daoImpl.createAccount("utkarsh@123", "", "Sharma", "161219971", "161219971");
+		List<String> actual= daoImpl.createAccount("utkarsh@123", "", "Sharma", "161219971", "161219971");
 		assertEquals("First name cannot be empty\n", actual);
 		
 	}
@@ -33,7 +33,7 @@ class UserDAOImplTest {
 	void testLastNameEmpty() {
 		//fail("Not yet implemented");
 		UserDAOImpl daoImpl= new UserDAOImpl();
-		String actual= daoImpl.createAccount("utkarsh@12", "Utkarsh", "", "161219971", "161219971");
+		List<String> actual= daoImpl.createAccount("utkarsh@12", "Utkarsh", "", "161219971", "161219971");
 		assertEquals("Last name cannot be empty\n", actual);
 		
 	}
@@ -42,7 +42,7 @@ class UserDAOImplTest {
 	void testPassNotMatch() {
 		//fail("Not yet implemented");
 		UserDAOImpl daoImpl= new UserDAOImpl();
-		String actual= daoImpl.createAccount("utkarsh@1", "Utkarsh", "Sharma", "161219971", "16121997");
+		List<String> actual= daoImpl.createAccount("utkarsh@1", "Utkarsh", "Sharma", "161219971", "16121997");
 		assertEquals("Passwords do not match\n", actual);
 		
 	}
@@ -51,7 +51,7 @@ class UserDAOImplTest {
 	void testPassLength() {
 		//fail("Not yet implemented");
 		UserDAOImpl daoImpl= new UserDAOImpl();
-		String actual= daoImpl.createAccount("utkarsh@gm", "Utkarsh", "Sharma", "1612", "1612");
+		List<String> actual= daoImpl.createAccount("utkarsh@gm", "Utkarsh", "Sharma", "1612", "1612");
 		assertEquals("Password length cannot be lesser than 8\n", actual);
 		
 	}
