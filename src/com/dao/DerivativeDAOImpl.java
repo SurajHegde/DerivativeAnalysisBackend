@@ -17,29 +17,29 @@ import com.pojo.Holding;
 
 public class DerivativeDAOImpl implements DerivativeDAO {
 
-//	public List<Holding> getAllUserHoldings(String emailId) {
-//		// TODO Auto-generated method stub
-//		List<Holding> allUserHoldings = new ArrayList<Holding>();
-//		String GET_HOLDINGS_USER = "select * from holdings where emailid = ?";
-//		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_HOLDINGS_USER);){
-//			ps.setString(1,emailId);
-//			ResultSet set = ps.executeQuery();
-//			while(set.next()) {
-//				Holding userHolding = new Holding();
-//				userHolding.setAvgPrice(set.getDouble("avg_price"));
-//				userHolding.setSymbol(set.getString("symbol"));
-//				userHolding.setType(set.getString("type"));
-//				userHolding.setPosition(set.getString("position"));
-//				userHolding.setExpiryDate(set.getString("expiry_date"));
-//				userHolding.setNumLots(set.getInt("lots"));
-//				userHolding.setPremium(set.getDouble("premium"));
-//				allUserHoldings.add(userHolding);
-//			}
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//		return allUserHoldings;
-//	}
+	//	public List<Holding> getAllUserHoldings(String emailId) {
+	//		// TODO Auto-generated method stub
+	//		List<Holding> allUserHoldings = new ArrayList<Holding>();
+	//		String GET_HOLDINGS_USER = "select * from holdings where emailid = ?";
+	//		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_HOLDINGS_USER);){
+	//			ps.setString(1,emailId);
+	//			ResultSet set = ps.executeQuery();
+	//			while(set.next()) {
+	//				Holding userHolding = new Holding();
+	//				userHolding.setAvgPrice(set.getDouble("avg_price"));
+	//				userHolding.setSymbol(set.getString("symbol"));
+	//				userHolding.setType(set.getString("type"));
+	//				userHolding.setPosition(set.getString("position"));
+	//				userHolding.setExpiryDate(set.getString("expiry_date"));
+	//				userHolding.setNumLots(set.getInt("lots"));
+	//				userHolding.setPremium(set.getDouble("premium"));
+	//				allUserHoldings.add(userHolding);
+	//			}
+	//		} catch(Exception e) {
+	//			e.printStackTrace();
+	//		}
+	//		return allUserHoldings;
+	//	}
 	//Check if user has a particular holding
 	@Override
 	public Holding checkUserHolding(String emailId, String symbol, String type, String expiryDate,double strikePrice) {
@@ -233,7 +233,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		List<Holding> specificDerivative = new ArrayList<Holding>();
 		String GET_DERIVATIVE = "select * from derivatives where symbol = ?";
 		System.out.println(symbol);
-		
+
 		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_DERIVATIVE)){
 			ps.setString(1, symbol);
 			ResultSet set = ps.executeQuery();
@@ -290,7 +290,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 		}
 		return spotPrice;
 	}
-	
+
 	public HashMap<String,Double> getValueUser(String emailId) {
 		String GET_DERIVATIVE = "select * from holdings where emailid = ?";
 		HashMap<String,Double> totalValue = new HashMap<String,Double>();
@@ -359,14 +359,65 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 					} else {
 						instrumentValue.put(instrument,(premium-lcp)*numLots*lotSize);
 					}
-					
+
 				}
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return instrumentValue;
 	}
+	public HashMap<String,HashMap<String,Double>> getChartComponent(String emailId){
+		String GET_INSTRUMENTS = "select * from holdings where emailid = ?";
+		HashMap<String,HashMap<String,Double>> instrumentValues = new HashMap<String,HashMap<String,Double>> ();
+		HashMap<String,Double> derivativeValue = new HashMap<String,Double>();
+		UserHoldingExtraFunctions extra = new UserHoldingExtraFunctions();
+		try(PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_INSTRUMENTS)){
+			ps.setString(1, emailId);
+			derivativeValue.put("FUT",0d);
+			derivativeValue.put("CE", 0d);
+			derivativeValue.put("PE", 0d);
+			ResultSet set = ps.executeQuery();
+			while(set.next()) {
+				String type = set.getString("type");
+				String expiryDate = set.getString("expiryDate");
+				String symbol = set.getString("symbol");
+				double strikePrice = set.getDouble("strike_price");
+				double lcp = set.getDouble("lcp");
+				double ltp = extra.getSpotPrice(symbol, type, expiryDate, strikePrice);
+				int numLots = set.getInt("lots");
+				int lotSize = getLotSize(symbol);
+				double premium = set.getDouble("premium");
+				
+				if(instrumentValues.containsKey(symbol)) {
+					if(type.equals("FUT")) {
+						derivativeValue.put("FUT",(Double)(derivativeValue.get("FUT") + (ltp-lcp)*numLots*(lotSize)));
+					}
+					else if(type.equals("CE")) {
+						derivativeValue.put("CE", (Double)(derivativeValue.get("CE") + (premium-lcp)*numLots*lotSize));
+					}
+					else {
+						derivativeValue.put("PE", (Double)(derivativeValue.get("PE") + (premium-lcp)*numLots*lotSize));
+					}
+					instrumentValues.put(symbol,derivativeValue);
+				} else {
+					if(type.equals("FUT")) {
+						derivativeValue.put("FUT",(Double)(ltp-lcp)*numLots*(lotSize));
+					}
+					else if(type.equals("CE")) {
+						derivativeValue.put("CE", (Double)(premium-lcp)*numLots*lotSize);
+					}
+					else {
+						derivativeValue.put("PE", (Double)(premium-lcp)*numLots*lotSize);
+					}
+				}
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return instrumentValues;
+	}
+
 }
 

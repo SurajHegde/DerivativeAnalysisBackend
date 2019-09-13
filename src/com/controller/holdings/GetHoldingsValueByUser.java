@@ -19,11 +19,8 @@ public class GetHoldingsValueByUser {
 	//@Consumes(MediaType.APPLICATION_JSON)
 	
 	public JSONObject valueByUser(String emailId) {
-		HashMap<String,Double> userValue = new HashMap<String,Double>();
-		DerivativeDAOImpl dl = new DerivativeDAOImpl();
-		userValue = dl.getValueUser(emailId);
+		
 		JSONObject response = new JSONObject();
-		response.put("totalValue", userValue);
 		return response;
 	}
 }

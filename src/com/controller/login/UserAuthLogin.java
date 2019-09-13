@@ -3,6 +3,7 @@ package com.controller.login;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.json.simple.JSONObject;
 
+import com.dao.DerivativeDAOImpl;
 import com.dao.UserDAOImpl;
 import com.logic.UserHoldingExtraFunctions;
 import com.pojo.Holding;
@@ -55,6 +57,10 @@ public class UserAuthLogin {
 			gainList.add(BigDecimal.valueOf(gain).setScale(2, RoundingMode.HALF_UP).doubleValue());
 			gainPercentageList.add(BigDecimal.valueOf(gainPercentage).setScale(2, RoundingMode.HALF_UP).doubleValue());
 		}
+
+		HashMap<String,HashMap<String,Double>> userValue = new HashMap<String,HashMap<String,Double>>();
+		DerivativeDAOImpl dl = new DerivativeDAOImpl();
+		userValue = dl.getChartComponent(emailId);
 		
 		JSONObject response = new JSONObject();
 		response.put("message", message);
@@ -66,6 +72,7 @@ public class UserAuthLogin {
 		response.put("gainList", gainList);
 		response.put("gainPercentageList", gainPercentageList);
 		response.put("error", error);
+		response.put("dashBoardComponent", userValue);
 		return(response);
 	}
 }
