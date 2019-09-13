@@ -173,7 +173,6 @@ public class UserDAOImpl implements UserDAO {
 			holding.setSpotPrice(spotPrice);
 			Double gainPercentage = new Double(((spotPrice - holding.getLtp())*100)/holding.getLtp());
 			gainPercentageList.add(BigDecimal.valueOf(gainPercentage).setScale(2, RoundingMode.HALF_UP).doubleValue());
-			gainPercentageList.add(((spotPrice - holding.getLtp())*holding.getNumLots()*holding.getLotSize())/holding.getLtp());
 		}
 		return gainPercentageList;
 	}

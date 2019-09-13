@@ -21,7 +21,7 @@ import com.pojo.StrategyOutput;
 
 @Path("/strategyservlet")
 
-public class StrategyServlet {
+public class StrategyService {
 
 	// TODO Auto-generated method stub
 	

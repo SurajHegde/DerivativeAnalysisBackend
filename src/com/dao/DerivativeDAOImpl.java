@@ -17,29 +17,6 @@ import com.pojo.Holding;
 
 public class DerivativeDAOImpl implements DerivativeDAO {
 
-	//	public List<Holding> getAllUserHoldings(String emailId) {
-	//		// TODO Auto-generated method stub
-	//		List<Holding> allUserHoldings = new ArrayList<Holding>();
-	//		String GET_HOLDINGS_USER = "select * from holdings where emailid = ?";
-	//		try (PreparedStatement ps = MyConnection.openConnection().prepareStatement(GET_HOLDINGS_USER);){
-	//			ps.setString(1,emailId);
-	//			ResultSet set = ps.executeQuery();
-	//			while(set.next()) {
-	//				Holding userHolding = new Holding();
-	//				userHolding.setAvgPrice(set.getDouble("avg_price"));
-	//				userHolding.setSymbol(set.getString("symbol"));
-	//				userHolding.setType(set.getString("type"));
-	//				userHolding.setPosition(set.getString("position"));
-	//				userHolding.setExpiryDate(set.getString("expiry_date"));
-	//				userHolding.setNumLots(set.getInt("lots"));
-	//				userHolding.setPremium(set.getDouble("premium"));
-	//				allUserHoldings.add(userHolding);
-	//			}
-	//		} catch(Exception e) {
-	//			e.printStackTrace();
-	//		}
-	//		return allUserHoldings;
-	//	}
 	//Check if user has a particular holding
 	@Override
 	public Holding checkUserHolding(String emailId, String symbol, String type, String expiryDate,double strikePrice) {
@@ -381,7 +358,7 @@ public class DerivativeDAOImpl implements DerivativeDAO {
 			ResultSet set = ps.executeQuery();
 			while(set.next()) {
 				String type = set.getString("type");
-				String expiryDate = set.getString("expiryDate");
+				String expiryDate = set.getString("expiry_date");
 				String symbol = set.getString("symbol");
 				double strikePrice = set.getDouble("strike_price");
 				double lcp = set.getDouble("lcp");
